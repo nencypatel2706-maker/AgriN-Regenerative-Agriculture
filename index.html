@@ -1,26 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AgriN - Regenerative Agricultural Intelligence Network</title>
+    <title>AgriN: Regenerative Agricultural Intelligence Network</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
-                        agri: {
+                        agro: {
                             50: '#f0fdf4',
                             100: '#dcfce7',
+                            250: '#86efac',
                             500: '#22c55e',
                             600: '#16a34a',
                             700: '#15803d',
                             800: '#166534',
                             900: '#14532d',
+                            950: '#052e16',
                         }
                     }
                 }
@@ -28,518 +36,1312 @@
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        /* Custom scrollbar and animations */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.03); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s infinite ease-in-out;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans h-full flex flex-col antialiased selection:bg-agro-500 selection:text-white">
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <header class="bg-agro-950 text-white shadow-md sticky top-0 z-50 border-b border-agro-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo -->
+            <!-- Brand Logo & Tagline -->
             <div class="flex items-center space-x-3">
-                <div class="w-11 h-11 bg-gradient-to-tr from-agri-700 to-agri-500 rounded-xl flex items-center justify-center text-white shadow-md shadow-agri-500/20">
-                    <i class="fa-solid fa-seedling text-2xl"></i>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-agro-400 to-agro-600 flex items-center justify-center shadow-lg shadow-agro-900/50">
+                    <i class="fa-solid fa-seedling text-white text-2xl"></i>
                 </div>
                 <div>
-                    <h1 class="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-                        AgriN <span class="text-xs px-2 py-0.5 bg-agri-100 text-agri-800 rounded-full font-semibold">DPI v2.5</span>
-                    </h1>
-                    <p class="text-xs text-slate-500" data-i18n="tagline">Regenerative Agricultural Intelligence Network</p>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl font-bold tracking-tight bg-gradient-to-r from-agro-200 via-white to-agro-300 bg-clip-text text-transparent" data-i18n="brand_name">AgriN</span>
+                        <span class="text-xs bg-agro-800/80 text-agro-200 px-2 py-0.5 rounded-full border border-agro-700/50 font-medium" data-i18n="badge_dpg">Digital Public Good</span>
+                    </div>
+                    <p class="text-xs text-agro-300 font-medium tracking-wide" data-i18n="brand_tagline">Regenerative Agricultural Intelligence Network</p>
                 </div>
             </div>
 
-            <!-- Navigation Links -->
-            <nav class="hidden md:flex space-x-1 lg:space-x-2">
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all bg-agri-50 text-agri-700">
-                    <i class="fa-solid fa-chart-pie mr-2"></i><span data-i18n="tab_dashboard">Dashboard</span>
-                </button>
-                <button onclick="switchTab('cropdoc')" id="nav-cropdoc" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-stethoscope mr-2"></i><span data-i18n="tab_cropdoc">AI Crop Doctor</span>
-                </button>
-                <button onclick="switchTab('regenerative')" id="nav-regenerative" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-earth-americas mr-2"></i><span data-i18n="tab_regenerative">Regenerative Advisor</span>
-                </button>
-                <button onclick="switchTab('states')" id="nav-states" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold transition-all text-slate-600 hover:bg-slate-100">
-                    <i class="fa-solid fa-network-wired mr-2"></i><span data-i18n="tab_states">State DPI Grid</span>
-                </button>
-            </nav>
-
-            <!-- Language Selector & Profile -->
+            <!-- Global Controls: Language Picker & State Node -->
             <div class="flex items-center space-x-3">
-                <div class="relative">
-                    <select id="languageSelect" onchange="changeLanguage(this.value)" class="bg-slate-100 border border-slate-300 text-slate-800 text-sm rounded-lg focus:ring-agri-500 focus:border-agri-500 block p-2.5 font-medium cursor-pointer">
-                        <option value="en">English</option>
-                        <option value="hi">हिंदी (Hindi)</option>
-                        <option value="gu" selected>ગુજરાતી (Gujarati)</option>
-                        <option value="pa">ਪੰਜਾਬੀ (Punjabi)</option>
-                        <option value="ta">தமிழ் (Tamil)</option>
-                        <option value="te">తెలుగు (Telugu)</option>
-                        <option value="mr">मराठी (Marathi)</option>
+                <!-- Prominent Language Selector -->
+                <div class="flex items-center space-x-1 bg-agro-900/90 px-3 py-1.5 rounded-lg border border-agro-700 shadow-inner">
+                    <i class="fa-solid fa-globe text-agro-300 text-xs"></i>
+                    <select id="globalLanguageSelect" onchange="changeLanguage(this.value)" class="bg-transparent text-white font-semibold text-xs focus:outline-none cursor-pointer">
+                        <option value="en" class="bg-agro-900 text-white">English</option>
+                        <option value="hi" class="bg-agro-900 text-white">हिंदी (Hindi)</option>
+                        <option value="gu" class="bg-agro-900 text-white">ગુજરાતી (Gujarati)</option>
+                        <option value="pa" class="bg-agro-900 text-white">ਪੰਜਾਬੀ (Punjabi)</option>
+                        <option value="ta" class="bg-agro-900 text-white">தமிழ் (Tamil)</option>
+                        <option value="te" class="bg-agro-900 text-white">తెలుగు (Telugu)</option>
+                        <option value="mr" class="bg-agro-900 text-white">मराठी (Marathi)</option>
                     </select>
                 </div>
-                <div class="hidden sm:flex items-center space-x-2 pl-2 border-l border-slate-200">
-                    <div class="w-9 h-9 rounded-full bg-agri-100 text-agri-700 flex items-center justify-center font-bold text-sm">
-                        AP
-                    </div>
+
+                <!-- State Node Select -->
+                <div class="hidden lg:flex items-center space-x-2 bg-agro-900/80 px-3 py-1.5 rounded-lg border border-agro-800">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="text-xs text-slate-300" data-i18n="lbl_node">State Node:</span>
+                    <select id="stateNodeSelect" onchange="switchStateNode(this.value)" class="bg-transparent text-white font-semibold text-xs focus:outline-none cursor-pointer">
+                        <option value="Gujarat" class="bg-agro-900 text-white">Gujarat (Anand Grid)</option>
+                        <option value="Punjab" class="bg-agro-900 text-white">Punjab (Ludhiana Hub)</option>
+                        <option value="Maharashtra" class="bg-agro-900 text-white">Maharashtra (Vidarbha Grid)</option>
+                        <option value="Karnataka" class="bg-agro-900 text-white">Karnataka (Deccan Node)</option>
+                        <option value="Uttar Pradesh" class="bg-agro-900 text-white">Uttar Pradesh (Gangetic Node)</option>
+                    </select>
                 </div>
+
+                <!-- Notifications & Profile -->
+                <button onclick="openNotificationModal()" class="relative p-2 rounded-lg bg-agro-900 hover:bg-agro-800 transition text-agro-200 hover:text-white" title="Network Broadcasts">
+                    <i class="fa-solid fa-bell text-sm"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400"></span>
+                </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
+    <div class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+        
+        <!-- Navigation Tabs -->
+        <div class="flex overflow-x-auto space-x-2 border-b border-slate-200 pb-3 mb-6 no-scrollbar">
+            <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition bg-agro-600 text-white shadow-sm shadow-agro-600/30 whitespace-nowrap">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span data-i18n="tab_dashboard">Soil & Climate Hub</span>
+            </button>
+            <button onclick="switchTab('recommender')" id="tab-recommender" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 whitespace-nowrap">
+                <i class="fa-solid fa-seedling"></i>
+                <span data-i18n="tab_recommender">Regenerative Crop Recommender</span>
+            </button>
+            <button onclick="switchTab('doctor')" id="tab-doctor" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 whitespace-nowrap">
+                <i class="fa-solid fa-stethoscope"></i>
+                <span data-i18n="tab_doctor">Multimodal Crop Doctor & Live Scanner</span>
+            </button>
+            <button onclick="switchTab('voice')" id="tab-voice" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 whitespace-nowrap">
+                <i class="fa-solid fa-microphone-lines"></i>
+                <span data-i18n="tab_voice">Voice & Multilingual AI</span>
+            </button>
+            <button onclick="switchTab('grid')" id="tab-grid" class="tab-btn flex items-center space-x-2 px-4 py-2.5 rounded-xl font-medium text-sm transition bg-white text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200 whitespace-nowrap">
+                <i class="fa-solid fa-network-wired"></i>
+                <span data-i18n="tab_grid">Cross-State Data Grid</span>
+            </button>
+        </div>
 
-        <!-- TAB 1: DASHBOARD -->
-        <section id="tab-content-dashboard" class="space-y-6">
-            <!-- Welcome Banner -->
-            <div class="bg-gradient-to-r from-agri-800 via-agri-700 to-agri-900 rounded-2xl p-6 md:p-8 text-white shadow-xl relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 opacity-10 text-9xl">
-                    <i class="fa-solid fa-seedling"></i>
-                </div>
-                <div class="max-w-2xl relative z-10">
-                    <span class="bg-agri-600 text-agri-100 text-xs px-3 py-1 rounded-full font-semibold uppercase tracking-wider inline-block mb-3" data-i18n="badge_dpi">
-                        National Agro-Intelligence DPI
-                    </span>
-                    <h2 class="text-3xl font-bold tracking-tight mb-3" data-i18n="dash_welcome">Empowering Smallholders with Sustainable AI</h2>
-                    <p class="text-agri-100 text-sm md:text-base leading-relaxed mb-6" data-i18n="dash_desc">
-                        Integrating real-time satellite telemetry, soil health analytics, and multimodal diagnostic models to eradicate crop failure and scale regenerative agriculture across India.
-                    </p>
-                    <div class="flex flex-wrap gap-3">
-                        <button onclick="switchTab('cropdoc')" class="bg-white text-agri-900 px-5 py-2.5 rounded-xl font-bold text-sm shadow hover:bg-agri-50 transition flex items-center gap-2">
-                            <i class="fa-solid fa-camera"></i> <span data-i18n="btn_scan_leaf">Scan Diseased Leaf</span>
-                        </button>
-                        <button onclick="switchTab('regenerative')" class="bg-agri-600/80 border border-agri-400 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-agri-600 transition flex items-center gap-2">
-                            <i class="fa-solid fa-chart-line"></i> <span data-i18n="btn_soil_analytics">View Soil Analytics</span>
-                        </button>
+        <div id="content-dashboard" class="tab-content space-y-6">
+            <div class="bg-gradient-to-r from-emerald-900 to-agro-950 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-agro-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="space-y-2 z-10 mb-4 md:mb-0">
+                    <div class="inline-flex items-center space-x-2 bg-agro-800/80 px-3 py-1 rounded-full text-xs text-agro-200 border border-agro-700">
+                        <i class="fa-solid fa-satellite text-emerald-400"></i>
+                        <span id="activeNodeText">Sentinel-2 & ISRO Bhuvan Satellite Feed Connected</span>
                     </div>
+                    <h2 class="text-2xl font-bold" data-i18n="dash_title">Climate Resilience & Soil Carbon Index</h2>
+                    <p class="text-agro-200 text-sm max-w-2xl" data-i18n="dash_desc">Real-time multispectral satellite analytics coupled with Vertex AI weather forecasting to optimize soil moisture and prevent chemical degradation.</p>
+                </div>
+                <div class="flex space-x-3 z-10">
+                    <button onclick="triggerSatelliteRefresh()" class="px-4 py-2 bg-agro-600 hover:bg-agro-500 text-white rounded-xl text-sm font-semibold shadow transition flex items-center space-x-2">
+                        <i id="refreshIcon" class="fa-solid fa-rotate"></i>
+                        <span data-i18n="btn_sync_sat">Sync Satellite Data</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Quick Metrics Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-cloud-sun"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium" data-i18n="metric_weather">Weather Forecast</p>
-                        <h4 class="text-xl font-bold text-slate-900">32°C <span class="text-xs font-normal text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Optimal Rain</span></h4>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-agri-50 text-agri-600 rounded-xl flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-earth-africa"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium" data-i18n="metric_soil">Soil Carbon Index</p>
-                        <h4 class="text-xl font-bold text-slate-900">1.84% <span class="text-xs font-normal text-agri-700 bg-agri-50 px-2 py-0.5 rounded" data-i18n="metric_soil_status">Regenerating</span></h4>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-satellite"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium" data-i18n="metric_ndvi">NDVI Vegetation Index</p>
-                        <h4 class="text-xl font-bold text-slate-900">0.76 <span class="text-xs font-normal text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded" data-i18n="metric_ndvi_status">High Vigor</span></h4>
-                    </div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center space-x-4">
-                    <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-500 font-medium" data-i18n="metric_nodes">Active DPI Nodes</p>
-                        <h4 class="text-xl font-bold text-slate-900">14 States <span class="text-xs font-normal text-purple-700 bg-purple-50 px-2 py-0.5 rounded" data-i18n="metric_sync">Synced</span></h4>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Regional Advisory Feed -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-bullhorn text-agri-600"></i> <span data-i18n="sec_advisories">Live Multilingual Agro-Advisories</span>
-                    </h3>
-                    <span class="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full font-medium" data-i18n="updated_just_now">Updated via Vertex AI</span>
-                </div>
-                <div class="space-y-3">
-                    <div class="p-4 bg-agri-50/60 border border-agri-100 rounded-xl flex items-start gap-4">
-                        <div class="w-10 h-10 rounded-full bg-agri-600 text-white flex items-center justify-center shrink-0 mt-1">
-                            <i class="fa-solid fa-wheat-awn"></i>
+            <!-- Metrics Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="stat_soc">Soil Organic Carbon (SOC)</span>
+                        <div class="w-9 h-9 rounded-xl bg-agro-50 text-agro-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-seedling"></i>
                         </div>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-3xl font-bold text-slate-900" id="metric-soc">0.82%</span>
+                        <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+0.14% YoY</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Target: > 1.20% via Cover Cropping</p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+                        <div class="bg-agro-500 h-full rounded-full" style="width: 68%;"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="stat_ndvi">NDVI Vegetation Index</span>
+                        <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-3xl font-bold text-slate-900" id="metric-ndvi">0.68</span>
+                        <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">Optimal Health</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Multispectral anomaly: None detected</p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+                        <div class="bg-blue-500 h-full rounded-full" style="width: 82%;"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="stat_moisture">Root Zone Soil Moisture</span>
+                        <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-3xl font-bold text-slate-900" id="metric-moisture">42.4%</span>
+                        <span class="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Moderate Stress</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Recommended: Drip Irrigation at 04:00 AM</p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+                        <div class="bg-amber-500 h-full rounded-full" style="width: 55%;"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider" data-i18n="stat_carbon">Carbon Credit Potential</span>
+                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-3xl font-bold text-slate-900" id="metric-carbon">₹14,500</span>
+                        <span class="text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Per Hectare/Yr</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-2">Verified via Regenerative Protocols</p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full mt-3 overflow-hidden">
+                        <div class="bg-emerald-600 h-full rounded-full" style="width: 75%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map & Forecast -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
                         <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <h4 class="font-bold text-slate-900" data-i18n="adv_title_1">Gujarat & Madhya Pradesh Zone: Monsoon Sowing Advice</h4>
-                                <span class="text-xs bg-agri-200 text-agri-800 px-2 py-0.5 rounded font-semibold" data-i18n="badge_priority_high">High Priority</span>
-                            </div>
-                            <p class="text-sm text-slate-600 leading-relaxed" data-i18n="adv_desc_1">
-                                Soil moisture telemetry indicates ideal conditions for pearl millet (Bajra) and green gram intercropping. Avoid excessive urea application; switch to Rhizobium bio-fertilizers.
-                            </p>
+                            <h3 class="font-bold text-slate-900 text-lg" data-i18n="map_title">Geospatial Regional Raster View</h3>
+                            <p class="text-xs text-slate-500" data-i18n="map_desc">Live NDVI & Soil moisture zoning mapped over marginal farmlands.</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="setMapLayer('ndvi')" id="layer-ndvi" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-agro-600 text-white shadow">NDVI</button>
+                            <button onclick="setMapLayer('soil')" id="layer-soil" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">Soil</button>
+                            <button onclick="setMapLayer('moisture')" id="layer-moisture" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">Moisture</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- TAB 2: CROP DOCTOR -->
-        <section id="tab-content-cropdoc" class="space-y-6 hidden">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
-                <div class="max-w-3xl mb-6">
-                    <h3 class="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-                        <i class="fa-solid fa-stethoscope text-agri-600"></i> <span data-i18n="doc_title">AI Multimodal Crop Doctor & Live Scanner</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm" data-i18n="doc_subtitle">
-                        Use your live camera to scan infected leaves or upload a photo. Get instant AI diagnosis, organic solutions, and preventive next steps.
-                    </p>
-                </div>
+                    <div id="mapContainer" class="relative flex-1 min-h-[320px] bg-slate-900 rounded-xl overflow-hidden flex items-center justify-center border border-slate-800">
+                        <div class="absolute inset-0 opacity-40 bg-[radial-gradient(#22c55e_1px,transparent_1px)] [background-size:24px_24px]"></div>
+                        <div class="absolute top-12 left-16 w-32 h-28 bg-emerald-500/30 rounded-full blur-xl animate-pulse-slow"></div>
+                        <div class="absolute bottom-10 right-20 w-44 h-36 bg-amber-500/20 rounded-full blur-xl"></div>
+                        <div class="absolute top-20 right-32 w-28 h-28 bg-blue-500/30 rounded-full blur-xl"></div>
 
-                <!-- Mode Toggle -->
-                <div class="flex border-b border-slate-200 mb-6">
-                    <button onclick="switchScannerMode('upload')" id="mode-btn-upload" class="pb-3 px-4 font-semibold text-sm border-b-2 border-agri-600 text-agri-700 flex items-center gap-2">
-                        <i class="fa-solid fa-upload"></i> <span data-i18n="mode_upload">Upload Image</span>
-                    </button>
-                    <button onclick="switchScannerMode('camera')" id="mode-btn-camera" class="pb-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-video"></i> <span data-i18n="mode_live_cam">Live Camera</span>
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    <!-- Left: Scanner View -->
-                    <div class="space-y-4">
-                        <!-- Upload Container -->
-                        <div id="scanner-upload-container" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 text-center bg-slate-50 hover:bg-slate-100/50 transition">
-                            <input type="file" id="leafImageInput" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
-                            <div id="upload-placeholder" class="py-8">
-                                <div class="w-16 h-16 bg-agri-100 text-agri-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl shadow-inner">
-                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                        <div class="absolute inset-4 flex flex-col justify-between pointer-events-none">
+                            <div class="flex justify-between items-start">
+                                <div class="bg-slate-900/90 backdrop-blur border border-slate-700 text-white px-3 py-1.5 rounded-lg text-xs space-y-0.5">
+                                    <div class="text-emerald-400 font-bold"><i class="fa-solid fa-location-dot"></i> Zone A: Anand District</div>
+                                    <div class="text-slate-400 text-[10px]">Alluvial Loam • pH: 7.2 • NPK: Medium</div>
                                 </div>
-                                <h4 class="font-bold text-slate-800 mb-1" data-i18n="upload_prompt">Drag & drop or click to upload leaf photo</h4>
-                                <p class="text-xs text-slate-500 mb-4" data-i18n="upload_sub">Supports JPG, PNG, WEBP</p>
-                                <button onclick="document.getElementById('leafImageInput').click()" class="bg-agri-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow hover:bg-agri-700 transition">
-                                    <span data-i18n="btn_browse">Browse Files</span>
+                            </div>
+                            <div class="relative w-full h-full pointer-events-auto">
+                                <button onclick="openHotspotModal('Plot 104: Organic Pearl Millet', '0.88', '48%', 'Healthy regenerative rotation detected.')" class="absolute top-1/3 left-1/3 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/50 hover:scale-125 transition" title="Plot 104">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                                <button onclick="openHotspotModal('Plot 112: Mixed Legume Intercrop', '0.74', '35%', 'Slight nitrogen deficiency. Cover crop recommended.')" class="absolute bottom-1/4 right-1/3 w-6 h-6 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/50 hover:scale-125 transition" title="Plot 112">
+                                    <i class="fa-solid fa-triangle-exclamation text-xs"></i>
                                 </button>
                             </div>
-                            <div id="image-preview-container" class="hidden relative">
-                                <img id="selectedLeafImg" src="" alt="Selected Leaf" class="max-h-72 mx-auto rounded-xl shadow-md object-contain">
-                                <button onclick="resetImageUpload()" class="absolute top-2 right-2 bg-slate-900/80 text-white p-2 rounded-full hover:bg-slate-900">
-                                    <i class="fa-solid fa-xmark text-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Live Camera Container -->
-                        <div id="scanner-camera-container" class="hidden border-2 border-slate-300 rounded-2xl overflow-hidden bg-slate-900 relative">
-                            <video id="webcamVideo" autoplay playsinline class="w-full h-72 object-cover"></video>
-                            <canvas id="webcamCanvas" class="hidden"></canvas>
-                            <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-3">
-                                <button onclick="captureWebcamSnapshot()" class="bg-agri-600 hover:bg-agri-700 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg flex items-center gap-2">
-                                    <i class="fa-solid fa-camera"></i> <span data-i18n="btn_capture">Capture Leaf</span>
-                                </button>
-                                <button onclick="stopWebcam()" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2.5 rounded-full font-bold text-sm shadow-lg">
-                                    <i class="fa-solid fa-power-off"></i>
-                                </button>
+                            <div class="flex justify-between items-end">
+                                <div class="text-[11px] text-slate-400 bg-slate-900/80 px-2 py-1 rounded">Click hotspots for plot telemetry</div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <!-- Sample Pre-loaded Scans -->
-                        <div>
-                            <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2" data-i18n="sample_scans_title">Or test with pre-loaded sample scans:</p>
-                            <div class="flex gap-2 flex-wrap">
-                                <button onclick="loadSampleScan('blight')" class="text-xs bg-slate-100 hover:bg-agri-50 hover:text-agri-700 text-slate-700 px-3 py-2 rounded-lg font-medium border border-slate-200 transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> <span data-i18n="sample_blight">Leaf Blight</span>
-                                </button>
-                                <button onclick="loadSampleScan('nitrogen')" class="text-xs bg-slate-100 hover:bg-agri-50 hover:text-agri-700 text-slate-700 px-3 py-2 rounded-lg font-medium border border-slate-200 transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-leaf text-agri-600"></i> <span data-i18n="sample_nitrogen">N-Deficiency</span>
-                                </button>
-                                <button onclick="loadSampleScan('healthy')" class="text-xs bg-slate-100 hover:bg-agri-50 hover:text-agri-700 text-slate-700 px-3 py-2 rounded-lg font-medium border border-slate-200 transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-circle-check text-emerald-600"></i> <span data-i18n="sample_healthy">Healthy Crop</span>
-                                </button>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-slate-900 text-lg" data-i18n="forecast_title">Vertex AI Climate Forecast</h3>
+                            <span class="text-xs bg-agro-50 text-agro-700 px-2.5 py-1 rounded-full font-medium">7-Day Outlook</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">Precipitation and thermal stress forecasting for sustainable crop scheduling.</p>
+
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-900">Today • Sunny & Humid</div>
+                                        <div class="text-[11px] text-slate-500">Max 34°C • Wind: 12 km/h</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-700">0% Rain</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-cloud-rain"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-900">Tomorrow • Monsoon Shower</div>
+                                        <div class="text-[11px] text-slate-500">Max 29°C • 14mm expected</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-blue-600">85% Rain</span>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-cloud-sun"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs font-bold text-slate-900">Thursday • Part Cloudy</div>
+                                        <div class="text-[11px] text-slate-500">Max 31°C • Ideal Sowing</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-700">10% Rain</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Right: Diagnosis Output -->
-                    <div id="diagnosis-results" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-5">
-                        <div class="flex items-center justify-between pb-3 border-b border-slate-200">
-                            <h4 class="font-bold text-slate-900 text-lg flex items-center gap-2">
-                                <i class="fa-solid fa-microchip text-agri-600"></i> <span data-i18n="diag_report_title">AI Multimodal Diagnosis Report</span>
-                            </h4>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold">Gemini 2.5 Vision Active</span>
-                        </div>
-                        <div id="diagnosis-content" class="space-y-4">
-                            <div class="p-4 bg-white rounded-xl border border-slate-200">
-                                <h5 class="font-bold text-slate-800 text-base mb-1" data-i18n="diag_status_ready">Ready for Plant Scan</h5>
-                                <p class="text-sm text-slate-600 leading-relaxed" data-i18n="diag_instruction_desc">
-                                    Upload an image or use the live camera scanner to instantly diagnose crop diseases and receive organic remediation steps.
-                                </p>
+                    <div class="mt-6 pt-4 border-t border-slate-100">
+                        <div class="p-3 bg-agro-50 rounded-xl border border-agro-100 flex items-start space-x-3">
+                            <i class="fa-solid fa-circle-info text-agro-600 mt-0.5"></i>
+                            <div class="text-xs text-agro-900">
+                                <span class="font-bold">Advisory:</span> Rain expected tomorrow. Postpone urea broadcasting; favor organic compost application.
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- TAB 3: REGENERATIVE ADVISOR -->
-        <section id="tab-content-regenerative" class="space-y-6 hidden">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+        <div id="content-recommender" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div class="max-w-3xl mb-6">
-                    <h3 class="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-                        <i class="fa-solid fa-earth-americas text-agri-600"></i> <span data-i18n="regen_title">Vertex AI Regenerative Crop Recommender</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm" data-i18n="regen_subtitle">
-                        Select your state and soil profile to receive climate-resilient crop recommendations that restore soil carbon.
-                    </p>
+                    <h2 class="text-2xl font-bold text-slate-900" data-i18n="rec_title">AI Regenerative Crop Recommender</h2>
+                    <p class="text-sm text-slate-500 mt-1">Input soil metrics, regional climate, and water availability. Vertex AI models recommend climate-resilient crops that restore soil nitrogen and reduce groundwater depletion.</p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Select State / Region</label>
-                        <select id="reg-state" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-medium">
-                            <option value="gj">Gujarat (Saurashtra / Kutch)</option>
-                            <option value="mp">Madhya Pradesh (Malwa)</option>
-                            <option value="mh">Maharashtra (Vidarbha)</option>
-                            <option value="pb">Punjab (Central Plains)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Soil Type</label>
-                        <select id="reg-soil" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-medium">
-                            <option value="black">Black Cotton Soil (Regur)</option>
-                            <option value="alluvial">Alluvial Soil</option>
-                            <option value="red">Red Loamy Soil</option>
-                        </select>
-                    </div>
-                    <div class="flex items-end">
-                        <button onclick="generateRegenerativePlan()" class="w-full bg-agri-600 hover:bg-agri-700 text-white py-3 px-4 rounded-xl font-bold text-sm shadow transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Generate AI Plan</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Soil Type / Classification</label>
+                            <select id="rec-soil" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-agro-500">
+                                <option value="alluvial">Alluvial Loam (Nutrient Rich)</option>
+                                <option value="black">Black Cotton Soil (High Clay)</option>
+                                <option value="red">Red Laterite (Low Nitrogen)</option>
+                                <option value="arid">Arid Sandy Soil (Low Moisture)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Water Availability</label>
+                            <select id="rec-water" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-agro-500">
+                                <option value="rainfed">Rainfed / Monsoon Dependent</option>
+                                <option value="canal">Canal Irrigation (Moderate)</option>
+                                <option value="borewell">Borewell (Deep Groundwater)</option>
+                                <option value="drip">Micro-Irrigation / Drip</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Current Season / Sowing Window</label>
+                            <select id="rec-season" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-agro-500">
+                                <option value="kharif">Kharif (Monsoon / July - Oct)</option>
+                                <option value="rabi">Rabi (Winter / Nov - March)</option>
+                                <option value="zaid">Zaid (Summer / April - June)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Farming Objective</label>
+                            <select id="rec-goal" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-agro-500">
+                                <option value="soil_regeneration">Soil Regeneration & Carbon Sequestration</option>
+                                <option value="water_saving">Groundwater Conservation & Low Input</option>
+                                <option value="max_yield">High Economic Return & Export Grade</option>
+                            </select>
+                        </div>
+
+                        <button onclick="generateCropRecommendations()" class="w-full py-3 bg-agro-600 hover:bg-agro-500 text-white rounded-xl font-semibold shadow-lg shadow-agro-600/30 transition flex items-center justify-center space-x-2">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span data-i18n="btn_gen_rec">Generate AI Recommendations</span>
                         </button>
                     </div>
-                </div>
 
-                <div id="regenerative-results" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-gradient-to-br from-agri-50 to-emerald-50 border border-agri-200 rounded-2xl p-5 space-y-3">
-                        <span class="bg-agri-600 text-white text-xs px-2.5 py-1 rounded-full font-bold">Primary Recommendation</span>
-                        <h4 class="text-xl font-bold text-slate-900">Pearl Millet (Bajra) + Moth Bean</h4>
-                        <p class="text-xs text-slate-600">Drought-tolerant intercropping system that fixes atmospheric nitrogen and reduces irrigation demand by 45%.</p>
-                    </div>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
-                        <span class="bg-slate-200 text-slate-800 text-xs px-2.5 py-1 rounded-full font-bold">Soil Health Restorer</span>
-                        <h4 class="text-xl font-bold text-slate-900">Cluster Bean (Guar)</h4>
-                        <p class="text-xs text-slate-600">Deep taproot system breaks hardpan soil layers and enhances moisture retention naturally.</p>
-                    </div>
-                    <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
-                        <span class="bg-purple-100 text-purple-800 text-xs px-2.5 py-1 rounded-full font-bold">Climate Resilient</span>
-                        <h4 class="text-xl font-bold text-slate-900">Sesame (Til) Rotation</h4>
-                        <p class="text-xs text-slate-600">Short duration oilseed crop suitable for unpredictable rainfall patterns with high market return.</p>
+                    <div class="md:col-span-2 bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col justify-between">
+                        <div id="rec-results-area" class="space-y-4">
+                            <div class="h-full flex flex-col items-center justify-center text-center py-12">
+                                <div class="w-16 h-16 rounded-2xl bg-agro-100 text-agro-600 flex items-center justify-center text-2xl mb-4">
+                                    <i class="fa-solid fa-seedling"></i>
+                                </div>
+                                <h3 class="font-bold text-slate-800 text-lg">Ready for AI Analysis</h3>
+                                <p class="text-xs text-slate-500 max-w-sm mt-1">Configure your farm parameters on the left and click generate to receive multi-crop regenerative rotations tailored by Vertex AI.</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-200 text-xs text-slate-500 flex justify-between items-center">
+                            <span>Powered by Gemini Pro & Vertex tabular prediction</span>
+                            <span class="text-agro-700 font-semibold"><i class="fa-solid fa-shield-check"></i> Verified Carbon Positive</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- TAB 4: STATE DPI GRID -->
-        <section id="tab-content-states" class="space-y-6 hidden">
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
+        <div id="content-doctor" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
                 <div class="max-w-3xl mb-6">
-                    <h3 class="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-                        <i class="fa-solid fa-network-wired text-agri-600"></i> <span>Interoperable State Agricultural Data Grid</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm">
-                        Built as a Digital Public Good (DPG). Sharing cross-state climate models, pest tracking telemetry, and sustainable farming datasets in real-time.
-                    </p>
+                    <h2 class="text-2xl font-bold text-slate-900" data-i18n="doc_title">Multimodal Crop Disease & Live Camera Scanner</h2>
+                    <p class="text-sm text-slate-500 mt-1">Use your live webcam to scan infected leaves or upload a photo. Get instant AI diagnosis, easy organic solutions, and preventive next steps.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-slate-900 text-base">Gujarat State Agri-Node (GSAN)</h4>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">Synced & Active</span>
+                    <!-- Scanner / Upload Box -->
+                    <div class="space-y-4">
+                        <!-- Camera / Upload Toggle Buttons -->
+                        <div class="flex space-x-2 bg-slate-100 p-1 rounded-xl">
+                            <button onclick="switchScannerMode('upload')" id="mode-upload-btn" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white text-slate-800 shadow-sm transition">
+                                <i class="fa-solid fa-upload mr-1"></i> Upload Image
+                            </button>
+                            <button onclick="switchScannerMode('camera')" id="mode-camera-btn" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-800 transition">
+                                <i class="fa-solid fa-video mr-1"></i> Live Camera
+                            </button>
                         </div>
-                        <p class="text-xs text-slate-600">Sharing drone telemetry, Saurashtra soil moisture maps, and cotton pest forecasting models with MP and Rajasthan nodes.</p>
+
+                        <!-- Mode 1: Upload File Area -->
+                        <div id="uploadModeContainer" class="border-2 border-dashed border-slate-300 hover:border-agro-500 rounded-2xl p-6 text-center bg-slate-50 transition flex flex-col items-center justify-center cursor-pointer min-h-[260px] relative overflow-hidden">
+                            <input type="file" id="imageInput" accept="image/*" onchange="handleImageUpload(event)" class="absolute inset-0 opacity-0 cursor-pointer">
+                            <div id="uploadPlaceholder" class="space-y-3">
+                                <div class="w-16 h-16 rounded-2xl bg-agro-100 text-agro-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
+                                    <i class="fa-solid fa-camera-retro"></i>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-slate-800">Drop leaf image here</span> or <span class="text-agro-600">browse file</span>
+                                </div>
+                                <p class="text-xs text-slate-400">Supports JPG, PNG, WEBP up to 10MB</p>
+                            </div>
+                            <div id="imagePreviewContainer" class="hidden absolute inset-0 bg-white flex items-center justify-center p-2">
+                                <img id="imagePreview" src="" alt="Uploaded Leaf" class="max-h-full max-w-full object-contain rounded-xl">
+                            </div>
+                        </div>
+
+                        <!-- Mode 2: Live Webcam Stream & Capture Area -->
+                        <div id="cameraModeContainer" class="hidden border-2 border-slate-300 rounded-2xl p-4 text-center bg-slate-900 transition flex flex-col items-center justify-center min-h-[260px] relative overflow-hidden">
+                            <div id="cameraPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center space-y-3 bg-slate-900 z-10">
+                                <div class="w-16 h-16 rounded-2xl bg-agro-900 text-agro-400 flex items-center justify-center text-2xl">
+                                    <i class="fa-solid fa-video-slash"></i>
+                                </div>
+                                <p class="text-xs text-slate-300">Webcam not active yet</p>
+                                <button onclick="startLiveCamera()" class="px-4 py-2 bg-agro-600 hover:bg-agro-500 text-white rounded-xl text-xs font-bold shadow">
+                                    <i class="fa-solid fa-play mr-1"></i> Start Camera Stream
+                                </button>
+                            </div>
+                            <video id="webcamVideo" autoplay playsinline class="w-full h-56 object-cover rounded-xl hidden"></video>
+                            <canvas id="snapshotCanvas" class="hidden"></canvas>
+                            <div id="cameraControls" class="mt-3 hidden z-20">
+                                <button onclick="captureWebcamSnapshot()" class="px-5 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold shadow-lg flex items-center space-x-2">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <span>Capture Plant Snapshot</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sample Quick Selectors -->
+                        <div>
+                            <span class="text-xs font-semibold text-slate-600 block mb-2">Or test with pre-loaded sample scans:</span>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button onclick="loadSampleScan('blight')" class="p-2 rounded-xl border border-slate-200 hover:border-agro-500 text-xs font-medium text-slate-700 bg-slate-50 hover:bg-agro-50 transition text-left flex items-center space-x-2">
+                                    <div class="w-7 h-7 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center"><i class="fa-solid fa-virus"></i></div>
+                                    <span class="truncate">Leaf Blight</span>
+                                </button>
+                                <button onclick="loadSampleScan('nitrogen')" class="p-2 rounded-xl border border-slate-200 hover:border-agro-500 text-xs font-medium text-slate-700 bg-slate-50 hover:bg-agro-50 transition text-left flex items-center space-x-2">
+                                    <div class="w-7 h-7 rounded-lg bg-yellow-100 text-yellow-700 flex items-center justify-center"><i class="fa-solid fa-leaf"></i></div>
+                                    <span class="truncate">N-Deficiency</span>
+                                </button>
+                                <button onclick="loadSampleScan('healthy')" class="p-2 rounded-xl border border-slate-200 hover:border-agro-500 text-xs font-medium text-slate-700 bg-slate-50 hover:bg-agro-50 transition text-left flex items-center space-x-2">
+                                    <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center"><i class="fa-solid fa-check"></i></div>
+                                    <span class="truncate">Healthy Crop</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50 space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-slate-900 text-base">Madhya Pradesh Agri-Network (MPAN)</h4>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">Synced & Active</span>
+
+                    <!-- Diagnosis Output Box with Solutions & Preventive Measures -->
+                    <div class="bg-slate-50 rounded-2xl border border-slate-200 p-6 flex flex-col justify-between">
+                        <div id="diagnosis-results" class="space-y-4">
+                            <div class="h-full flex flex-col items-center justify-center text-center py-12">
+                                <div class="w-16 h-16 rounded-2xl bg-slate-200 text-slate-500 flex items-center justify-center text-2xl mb-4">
+                                    <i class="fa-solid fa-stethoscope"></i>
+                                </div>
+                                <h3 class="font-bold text-slate-800 text-lg">Awaiting Plant Scan</h3>
+                                <p class="text-xs text-slate-500 max-w-sm mt-1">Upload a photo, use the live camera scanner, or select a sample scan above to receive Gemini Multimodal diagnosis, organic solutions, and preventive steps.</p>
+                            </div>
                         </div>
-                        <p class="text-xs text-slate-600">Sharing Malwa plateau wheat rust early warning intelligence and organic soybean regenerative parameters.</p>
+
+                        <div class="pt-4 border-t border-slate-200 flex justify-between items-center text-xs text-slate-500">
+                            <span>Gemini 2.5 Flash Vision Agent</span>
+                            <span class="text-agro-600 font-semibold">Organic First & Prevention Policy</span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-    </main>
+        <div id="content-voice" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="max-w-3xl mb-6">
+                    <h2 class="text-2xl font-bold text-slate-900" data-i18n="voice_title">Voice & Multilingual Extension Agent</h2>
+                    <p class="text-sm text-slate-500 mt-1">Smallholder farmers can speak in regional Indian languages to receive spoken agro-advisories powered by Cloud Speech-to-Text and Dialogflow CX.</p>
+                </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-            <p>© 2026 AgriN - Regenerative Agricultural Intelligence Network. Built for Hackathons.</p>
-            <div class="flex space-x-4 mt-3 sm:mt-0 font-medium">
-                <span class="text-agri-700 font-semibold">Google AI Studio • Vertex AI • Gemini Multimodal</span>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Select Dialect / Language</label>
+                            <select id="voiceLangSelect" class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-800 focus:outline-none">
+                                <option value="hi">Hindi (हिंदी)</option>
+                                <option value="gu">Gujarati (ગુજરાતી)</option>
+                                <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+                                <option value="ta">Tamil (தமிழ்)</option>
+                                <option value="te">Telugu (తెలుగు)</option>
+                                <option value="en">English (Indian)</option>
+                            </select>
+                        </div>
+
+                        <div class="relative py-4">
+                            <div id="micPulse" class="absolute inset-0 rounded-full bg-agro-500/20 scale-100 transition duration-500"></div>
+                            <button id="micButton" onclick="toggleVoiceRecording()" class="relative w-20 h-20 rounded-full bg-agro-600 hover:bg-agro-500 text-white flex items-center justify-center text-2xl shadow-xl shadow-agro-600/40 transition">
+                                <i id="micIcon" class="fa-solid fa-microphone"></i>
+                            </button>
+                        </div>
+
+                        <div>
+                            <div id="voiceStatusText" class="text-sm font-bold text-slate-800">Tap to Speak Query</div>
+                            <p class="text-xs text-slate-400 mt-0.5">Example: "When should I harvest pearl millet?"</p>
+                        </div>
+
+                        <div id="waveformSim" class="flex items-center space-x-1 h-8 opacity-40">
+                            <div class="w-1 bg-agro-600 h-3 rounded-full"></div>
+                            <div class="w-1 bg-agro-600 h-6 rounded-full"></div>
+                            <div class="w-1 bg-agro-600 h-4 rounded-full"></div>
+                            <div class="w-1 bg-agro-600 h-8 rounded-full"></div>
+                            <div class="w-1 bg-agro-600 h-5 rounded-full"></div>
+                            <div class="w-1 bg-agro-600 h-3 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                        <div class="space-y-4 max-h-[340px] overflow-y-auto pr-2" id="chatTranscript">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 rounded-full bg-agro-100 text-agro-700 flex items-center justify-center font-bold text-xs">AI</div>
+                                <div class="bg-white p-4 rounded-2xl border border-slate-200 text-sm text-slate-700 shadow-sm max-w-lg">
+                                    Namaste! I am your AgriN Voice Extension Agent. Tap the microphone and ask me anything about soil health, weather, pest control, or regenerative crop sowing.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-t border-slate-200 flex space-x-2">
+                            <input type="text" id="voiceTextInput" placeholder="Or type your agricultural query here..." class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-agro-500">
+                            <button onclick="sendVoiceTextQuery()" class="px-5 py-2.5 bg-agro-600 hover:bg-agro-500 text-white rounded-xl text-sm font-semibold shadow transition">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content-grid" class="tab-content space-y-6 hidden">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900" data-i18n="grid_title">Interoperable Cross-State Data Grid</h2>
+                        <p class="text-sm text-slate-500 mt-1">Digital Public Good (DPG) infrastructure enabling Indian states to share agricultural models, soil telemetry, and climate resilience protocols.</p>
+                    </div>
+                    <div class="mt-4 md:mt-0 flex space-x-3">
+                        <button onclick="syncAllNodes()" class="px-4 py-2 bg-agro-600 hover:bg-agro-500 text-white rounded-xl text-xs font-semibold shadow transition flex items-center space-x-2">
+                            <i id="syncGridIcon" class="fa-solid fa-arrows-rotate"></i>
+                            <span data-i18n="btn_sync_grid">Synchronize All Nodes</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <h3 class="font-bold text-slate-900 text-sm">Gujarat State Node</h3>
+                            </div>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold">Active Sync</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Primary Focus: Arid soil resilience & drip irrigation data models.</p>
+                        <div class="flex justify-between items-center text-[11px] text-slate-500 pt-2 border-t border-slate-200">
+                            <span>Models Shared: 42</span>
+                            <span class="text-agro-600 font-semibold">Latency: 24ms</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <h3 class="font-bold text-slate-900 text-sm">Punjab State Node</h3>
+                            </div>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold">Active Sync</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Primary Focus: Crop residue management & stubble-free rotation.</p>
+                        <div class="flex justify-between items-center text-[11px] text-slate-500 pt-2 border-t border-slate-200">
+                            <span>Models Shared: 58</span>
+                            <span class="text-agro-600 font-semibold">Latency: 31ms</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl border border-slate-200 bg-slate-50 flex flex-col justify-between space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                                <h3 class="font-bold text-slate-900 text-sm">Maharashtra State Node</h3>
+                            </div>
+                            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold">Active Sync</span>
+                        </div>
+                        <p class="text-xs text-slate-500">Primary Focus: Rainfed drought prediction & pulse intercropping.</p>
+                        <div class="flex justify-between items-center text-[11px] text-slate-500 pt-2 border-t border-slate-200">
+                            <span>Models Shared: 64</span>
+                            <span class="text-agro-600 font-semibold">Latency: 19ms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-agro-50 border border-agro-100 flex flex-col md:flex-row justify-between items-center">
+                    <div class="space-y-1 mb-4 md:mb-0">
+                        <h4 class="font-bold text-agro-900 text-sm"><i class="fa-solid fa-code-compare"></i> AgriN Interoperable Open API Protocol</h4>
+                        <p class="text-xs text-agro-800">Built on open standards for seamless cross-state transfer of soil carbon metrics and predictive weather advisories.</p>
+                    </div>
+                    <button onclick="showApiDocModal()" class="px-4 py-2 bg-agro-700 hover:bg-agro-600 text-white rounded-xl text-xs font-semibold shadow transition">
+                        View API Spec
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="bg-slate-900 text-slate-400 py-6 mt-auto border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-xs space-y-3 md:space-y-0">
+            <div class="flex items-center space-x-2">
+                <span class="font-bold text-white">AgriN Network</span>
+                <span>• Built for Climate Resilience & Sustainable Food Security</span>
+            </div>
+            <div class="flex space-x-6">
+                <a href="#" onclick="showInfoToast('Google AI Studio & Vertex AI Hackathon Edition')" class="hover:text-white transition">Tech Stack</a>
+                <a href="#" onclick="showInfoToast('Digital Public Good (DPG) Registry')" class="hover:text-white transition">DPG Charter</a>
+                <a href="#" onclick="showInfoToast('Open source under MIT License')" class="hover:text-white transition">License</a>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript Application Logic -->
+    <!-- Modal Dialog -->
+    <div id="appModal" class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 transform transition-all">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="modalTitle" class="text-lg font-bold text-slate-900">Modal Title</h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="modalBody" class="text-sm text-slate-600 space-y-3 mb-6">
+                Modal content goes here...
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl border border-slate-800 text-xs flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <div id="toastIcon" class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastMessage">Action completed successfully.</span>
+    </div>
+
     <script>
-        let currentStream = null;
-
-        function switchTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('main > section').forEach(sec => {
-                sec.classList.add('hidden');
-            });
-            // Show selected tab content
-            document.getElementById('tab-content-' + tabId).classList.remove('hidden');
-
-            // Reset navigation button styles
-            document.querySelectorAll('nav button').forEach(btn => {
-                btn.classList.remove('bg-agri-50', 'text-agri-700');
-                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
-            });
-
-            // Highlight active navigation button
-            const activeBtn = document.getElementById('nav-' + tabId);
-            if(activeBtn) {
-                activeBtn.classList.add('bg-agri-50', 'text-agri-700');
-                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
+        // Multilingual Dictionary for UI
+        const translations = {
+            en: {
+                brand_name: "AgriN",
+                badge_dpg: "Digital Public Good",
+                brand_tagline: "Regenerative Agricultural Intelligence Network",
+                lbl_node: "State Node:",
+                tab_dashboard: "Soil & Climate Hub",
+                tab_recommender: "Regenerative Crop Recommender",
+                tab_doctor: "Multimodal Crop Doctor & Live Scanner",
+                tab_voice: "Voice & Multilingual AI",
+                tab_grid: "Cross-State Data Grid",
+                dash_title: "Climate Resilience & Soil Carbon Index",
+                dash_desc: "Real-time multispectral satellite analytics coupled with Vertex AI weather forecasting to optimize soil moisture and prevent chemical degradation.",
+                btn_sync_sat: "Sync Satellite Data",
+                stat_soc: "Soil Organic Carbon (SOC)",
+                stat_ndvi: "NDVI Vegetation Index",
+                stat_moisture: "Root Zone Soil Moisture",
+                stat_carbon: "Carbon Credit Potential",
+                map_title: "Geospatial Regional Raster View",
+                map_desc: "Live NDVI & Soil moisture zoning mapped over marginal farmlands.",
+                forecast_title: "Vertex AI Climate Forecast",
+                rec_title: "AI Regenerative Crop Recommender",
+                btn_gen_rec: "Generate AI Recommendations",
+                doc_title: "Multimodal Crop Disease & Live Camera Scanner",
+                voice_title: "Voice & Multilingual Extension Agent",
+                grid_title: "Interoperable Cross-State Data Grid",
+                btn_sync_grid: "Synchronize All Nodes"
+            },
+            hi: {
+                brand_name: "AgriN (एग्रीएन)",
+                badge_dpg: "डिजिटल पब्लिक गुड",
+                brand_tagline: "पुनर्उत्पादक कृषि बुद्धिमत्ता नेटवर्क",
+                lbl_node: "राज्य नोड:",
+                tab_dashboard: "मृदा और जलवायु केंद्र",
+                tab_recommender: "पुनर्उत्पादक फसल अनुशंसा",
+                tab_doctor: "फसल डॉक्टर और लाइव स्कैनर",
+                tab_voice: "वॉयस और बहुभाषी एआई",
+                tab_grid: "अंतर-राज्यीय डेटा ग्रिड",
+                dash_title: "जलवायु लचीलापन और मृदा कार्बन सूचकांक",
+                dash_desc: "मृदा की नमी को अनुकूलित करने और रासायनिक क्षरण को रोकने के लिए वर्टेक्स एआई मौसम पूर्वानुमान के साथ वास्तविक समय उपग्रह विश्लेषण।",
+                btn_sync_sat: "उपग्रह डेटा सिंक करें",
+                stat_soc: "मृदा कार्बन (SOC)",
+                stat_ndvi: "NDVI वनस्पति सूचकांक",
+                stat_moisture: "मूल क्षेत्र मृदा नमी",
+                stat_carbon: "कार्बन क्रेडिट क्षमता",
+                map_title: "भू-स्थानिक क्षेत्रीय रास्टर दृश्य",
+                map_desc: "हाशिये की कृषि भूमि पर लाइव NDVI और मृदा नमी ज़ोनिंग।",
+                forecast_title: "वर्टेक्स एआई जलवायु पूर्वानुमान",
+                rec_title: "एआई पुनर्उत्पादक फसल अनुशंसा",
+                btn_gen_rec: "एआई अनुशंसाएँ उत्पन्न करें",
+                doc_title: "मल्टीमोडल फसल रोग और लाइव कैमरा स्कैनर",
+                voice_title: "वॉयस और बहुभाषी विस्तार एजेंट",
+                grid_title: "अंतर-राज्यीय डेटा ग्रिड",
+                btn_sync_grid: "सभी नोड्स सिंक करें"
+            },
+            gu: {
+                brand_name: "AgriN (એગ્રીએન)",
+                badge_dpg: "ડિજિટલ પબ્લિક ગુડ",
+                brand_tagline: "પુનર્જીવિત કૃષિ ગુપ્તચર નેટવર્ક",
+                lbl_node: "રાજ્ય નોડ:",
+                tab_dashboard: "જમીન અને આબોહવા હબ",
+                tab_recommender: "પાક ભલામણ",
+                tab_doctor: "પાક ડોક્ટર અને લાઈવ સ્કેનર",
+                tab_voice: "વોઈસ અને બહુભાષી AI",
+                tab_grid: "ક્રોસ-સ્ટેટ ડેટા ગ્રીડ",
+                dash_title: "આબોહવા સ્થિતિસ્થાપકતા અને માટી કાર્બન સૂચકાંક",
+                dash_desc: "જમીનની ભેજ જાળવવા અને રાસાયણિક બગાડ અટકાવવા માટે સેટેલાઇટ અને વર્ટેક્સ AI વિશ્લેષણ.",
+                btn_sync_sat: "સેટેલાઇટ ડેટા સિંક કરો",
+                stat_soc: "જમીન કાર્બન (SOC)",
+                stat_ndvi: "NDVI વનસ્પતિ સૂચકાંક",
+                stat_moisture: "મૂળ ક્ષેત્ર ભેજ",
+                stat_carbon: "કાર્બન ક્રેડિટ સંભાવના",
+                map_title: "ભૂ-સ્થાનિક પ્રાદેશિક રાસ્ટર દૃશ્ય",
+                map_desc: "ખેતરો પર લાઈવ NDVI અને ભેજ મેપિંગ.",
+                forecast_title: "વર્ટેક્સ AI ક્લાઇમેટ ફોરકાસ્ટ",
+                rec_title: "AI પાક ભલામણ",
+                btn_gen_rec: "AI ભલામણો બનાવો",
+                doc_title: "મલ્ટીમોડલ પાક રોગ અને લાઇવ કેમેરા સ્કેનર",
+                voice_title: "વોઈસ એક્સટેન્શન એજન્ટ",
+                grid_title: "ક્રોસ-સ્ટેટ ડેટા ગ્રીડ",
+                btn_sync_grid: "તમામ નોડ્સ સિંક કરો"
+            },
+            pa: {
+                brand_name: "AgriN",
+                badge_dpg: "ਡਿਜੀਟਲ ਪਬਲਿਕ ਗੁਡ",
+                brand_tagline: "ਰੀਜਨਰੇਟਿਵ ਐਗਰੀਕਲਚਰਲ ਇੰਟੈਲੀਜੈਂਸ ਨੈੱਟਵਰਕ",
+                lbl_node: "ਰਾਜ ਨੋਡ:",
+                tab_dashboard: "ਮਿੱਟੀ ਅਤੇ ਜਲਵਾਯੂ ਹੱਬ",
+                tab_recommender: "ਫਸਲ ਦੀ ਸਿਫ਼ਾਰਸ਼",
+                tab_doctor: "ਫਸਲ ਡਾਕਟਰ ਅਤੇ ਲਾਈਵ ਸਕੈਨਰ",
+                tab_voice: "ਵੌਇਸ ਅਤੇ ਬਹੁਭাষੀ AI",
+                tab_grid: "ਕਰਾਸ-ਸਟੇਟ ਡਾਟਾ ਗ੍ਰਿਡ",
+                dash_title: "ਜਲਵਾਯੂ ਲਚਕਤਾ ਅਤੇ ਮਿੱਟੀ ਕਾਰਬਨ ਸੂਚਕਾਂਕ",
+                dash_desc: "ਮਿੱਟੀ ਦੀ ਨਮੀ ਨੂੰ ਅਨੁਕੂਲ ਬਣਾਉਣ ਲਈ ਰੀਅਲ-ਟਾਈਮ ਉਪਗ੍ਰਹਿ ਵਿਸ਼ਲੇਸ਼ਣ।",
+                btn_sync_sat: "ਸੈਟੇਲਾਈਟ ਡਾਟਾ ਸਿੰਕ ਕਰੋ",
+                stat_soc: "ਮਿੱਟੀ ਜੈਵਿਕ ਕਾਰਬਨ",
+                stat_ndvi: "NDVI ਸੂਚਕਾਂਕ",
+                stat_moisture: "ਮਿੱਟੀ ਦੀ ਨਮੀ",
+                stat_carbon: "ਕਾਰਬਨ ਕ੍ਰੈਡਿਟ ਸੰਭਾਵਨਾ",
+                map_title: "ਜੀਓਸਪેશੀਅਲ ਰਾਸਟਰ ভியூ",
+                map_desc: "ਖੇਤਾਂ ਵਿੱਚ ਲਾਈਵ NDVI ਅਤੇ ਨਮੀ ਮੈਪਿੰਗ।",
+                forecast_title: "ਵਰਟੈਕਸ ਏਆਈ ਜਲਵਾਯੂ ਪੂਰਵ ਅਨੁਮਾਨ",
+                rec_title: "ਏਆਈ ਫਸਲ ਸਿਫਾਰਸ਼",
+                btn_gen_rec: "ਏਆਈ ਸਿਫਾਰਸ਼ਾਂ ਤਿਆਰ ਕਰੋ",
+                doc_title: "ਮਲਟੀਮੋਡਲ ਫਸਲ ਰੋਗ ਅਤੇ ਲਾਈਵ ਕੈਮਰਾ ਸਕੈਨਰ",
+                voice_title: "ਵੌਇਸ ਐਕਸਟੈਂਸ਼ਨ ਏਜੰਟ",
+                grid_title: "ਕਰਾਸ-ਸਟੇਟ ਡਾਟਾ ਗ੍ਰਿਡ",
+                btn_sync_grid: "ਸਾਰੇ ਨੋਡ ਸਿੰਕ ਕਰੋ"
+            },
+            ta: {
+                brand_name: "AgriN",
+                badge_dpg: "டிஜிட்டல் பொது நலம்",
+                brand_tagline: "மறுசீரமைப்பு விவசாய நுண்ணறிவு வலையமைப்பு",
+                lbl_node: "மாநில முனையகம்:",
+                tab_dashboard: "மண் மற்றும் காலநிலை மையம்",
+                tab_recommender: "பயிர் பரிந்துரை",
+                tab_doctor: "பயிர் மருத்துவர் & நேரலை ஸ்கேனர்",
+                tab_voice: "குரல் மற்றும் பன்மொழி AI",
+                tab_grid: "மாநிலங்களுக்கு இடையேயான தரவு கட்டம்",
+                dash_title: "காலநிலை நெகிழ்ச்சி மற்றும் மண் கார்பன் குறியீடு",
+                dash_desc: "மண் ஈரப்பதத்தை மேம்படுத்த நிகழ்நேர செயற்கைக்கோள் பகுப்பாய்வு.",
+                btn_sync_sat: "செயற்கைக்கோள் தரவு ஒத்திசைவு",
+                stat_soc: "மண் கரிம கார்பன்",
+                stat_ndvi: "NDVI தாவர குறியீடு",
+                stat_moisture: "மண் ஈரப்பதம்",
+                stat_carbon: "கார்பன் கடன் சாத்தியம்",
+                map_title: "புவியியல் பிராந்திய காட்சி",
+                map_desc: "விவசாய நிலங்களில் நேரலை NDVI வரைபடம்.",
+                forecast_title: "வெர்டெக்ஸ் AI காலநிலை முன்னறிவிப்பு",
+                rec_title: "AI பயிர் பரிந்துரை",
+                btn_gen_rec: "AI பரிந்துரைகளை உருவாக்கு",
+                doc_title: "பயிர் நோய் மற்றும் நேரலை கேமரா ஸ்கேனர்",
+                voice_title: "குரல் நீட்டிப்பு முகவர்",
+                grid_title: "தரவு கட்டம்",
+                btn_sync_grid: "அனைத்து முனையங்களையும் ஒத்திசைக்கவும்"
+            },
+            te: {
+                brand_name: "AgriN",
+                badge_dpg: "డిజిటల్ పబ్లిక్ గుడ్",
+                brand_tagline: "పునరుత్పత్తి వ్యవసాయ ఇంటెలిజెన్స్ నెట్‌వర్క్",
+                lbl_node: "రాష్ట్ర నోడ్:",
+                tab_dashboard: "నేల & వాతావరణ కేంద్రం",
+                tab_recommender: "పునరుత్పత్తి పంట సిఫార్సు",
+                tab_doctor: "పంట డాక్టర్ & లైవ్ స్కానర్",
+                tab_voice: "వాయిస్ & బహుభాషా AI",
+                tab_grid: "క్రాస్-స్టేట్ డేటా గ్రిడ్",
+                dash_title: "వాతావరణ స్థితిస్థాపకత & నేల కార్బన్ సూచిక",
+                dash_desc: "నేల తేమను ఆప్టిమైజ్ చేయడానికి రియల్ టైమ్ ఉపగ్రహ విశ్లేషణ.",
+                btn_sync_sat: "శాటిలైట్ డేటాను సింక్ చేయండి",
+                stat_soc: "నేల సేంద్రీయ కార్బన్",
+                stat_ndvi: "NDVI ఇండెక్స్",
+                stat_moisture: "నేల తేమ",
+                stat_carbon: "కార్బన్ క్రెడిట్ సంభావ్యత",
+                map_title: "భౌగోళిక ప్రాంతీయ వీక్షణ",
+                map_desc: "పొలాలపై లైవ్ NDVI మరియు తేమ మ్యాపింగ్.",
+                forecast_title: "వెక్టెక్స్ AI వాతావరణ అంచనా",
+                rec_title: "AI పంట సిఫార్సులు",
+                btn_gen_rec: "AI సిఫార్సులను రూపొందించండి",
+                doc_title: "మల్టీమోడల్ పంట వ్యాధి & లైవ్ కెమెరా స్కానర్",
+                voice_title: "వాయిస్ ఎక్స్‌టెన్ഷన్ ఏజెంట్",
+                grid_title: "క్రాస్-స్టేట్ డేటా గ్రిడ్",
+                btn_sync_grid: "అన్ని నోడ్స్ సింక్ చేయండి"
+            },
+            mr: {
+                brand_name: "AgriN",
+                badge_dpg: "डिजिटल पब्लिक गुड",
+                brand_tagline: "पुनरुत्पादक कृषी गुप्तचर नेटवर्क",
+                lbl_node: "राज्य नोड:",
+                tab_dashboard: "माती आणि हवामान केंद्र",
+                tab_recommender: "पीक शिफारस",
+                tab_doctor: "पीक डॉक्टर आणि लाईव्ह स्कॅनर",
+                tab_voice: "व्हॉइस आणि बहुभाषिक AI",
+                tab_grid: "आंतर-राज्य डेटा ग्रिड",
+                dash_title: "हवामान लवचिकता आणि माती कार्बन इंडेक्स",
+                dash_desc: "मातीतील ओलावा अनुकूल करण्यासाठी रीअल-टाइम उपग्रह विश्लेषण.",
+                btn_sync_sat: "सॅटेलाइट डेटा सिंक करा",
+                stat_soc: "माती सेंद्रिय कार्बन",
+                stat_ndvi: "NDVI इंडेक्स",
+                stat_moisture: "मातीचा ओलावा",
+                stat_carbon: "कार्बन क्रेडिट क्षमता",
+                map_title: "भौगोलिक प्रादेशिक दृश्य",
+                map_desc: "शेत जमीनीवर लाईव्ह NDVI आणि ओलावा मॅपिंग.",
+                forecast_title: "व्हर्टेक्स AI हवामान अंदाज",
+                rec_title: "AI पीक शिफारसी",
+                btn_gen_rec: "AI शिफारसी तयार करा",
+                doc_title: "मल्टीमोडल पीक रोग आणि लाईव्ह कॅमेरा स्कॅनर",
+                voice_title: "व्हॉइस विस्तार एजंट",
+                grid_title: "आंतर-राज्य डेटा ग्रिड",
+                btn_sync_grid: "सर्व नोड्स सिंक करा"
             }
+        };
 
-            // If switching away from cropdoc, stop webcam if running
-            if (tabId !== 'cropdoc') {
-                stopWebcam();
+        function changeLanguage(langCode) {
+            const dict = translations[langCode] || translations['en'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerText = dict[key];
+                }
+            });
+            showToast('Language switched successfully!');
+        }
+
+        // Tab Switcher Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-agro-600', 'text-white', 'shadow-sm', 'shadow-agro-600/30');
+                btn.classList.add('bg-white', 'text-slate-600', 'hover:bg-slate-100', 'border', 'border-slate-200');
+            });
+
+            document.getElementById('content-' + tabId).classList.remove('hidden');
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.classList.remove('bg-white', 'text-slate-600', 'hover:bg-slate-100', 'border', 'border-slate-200');
+            activeBtn.classList.add('bg-agro-600', 'text-white', 'shadow-sm', 'shadow-agro-600/30');
+
+            // If leaving camera tab, stop webcam stream if active
+            if (tabId !== 'doctor') {
+                stopLiveCamera();
             }
         }
 
+        // State Node Selector
+        function switchStateNode(stateName) {
+            document.getElementById('activeNodeText').innerText = stateName + ' Regional Sensor Grid Connected';
+            showToast('Switched active state node to ' + stateName);
+            document.getElementById('metric-soc').innerText = (0.75 + Math.random() * 0.2).toFixed(2) + '%';
+            document.getElementById('metric-ndvi').innerText = (0.60 + Math.random() * 0.15).toFixed(2);
+            document.getElementById('metric-moisture').innerText = (35 + Math.random() * 15).toFixed(1) + '%';
+        }
+
+        // Satellite Sync Simulation
+        function triggerSatelliteRefresh() {
+            const icon = document.getElementById('refreshIcon');
+            icon.classList.add('fa-spin');
+            showToast('Connecting to ISRO & Sentinel-2 multispectral feed...');
+            setTimeout(() => {
+                icon.classList.remove('fa-spin');
+                document.getElementById('metric-soc').innerText = '0.85%';
+                document.getElementById('metric-ndvi').innerText = '0.71';
+                showToast('Satellite telemetry successfully refreshed!');
+            }, 1200);
+        }
+
+        // Map Layers switcher
+        function setMapLayer(layerType) {
+            ['ndvi', 'soil', 'moisture'].forEach(l => {
+                const btn = document.getElementById('layer-' + l);
+                if (btn) {
+                    if (l === layerType) {
+                        btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-agro-600 text-white shadow';
+                    } else {
+                        btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200';
+                    }
+                }
+            });
+            showToast('Switched raster visualization to ' + layerType.toUpperCase() + ' layer.');
+        }
+
+        // Hotspot Modal
+        function openHotspotModal(title, ndvi, moisture, status) {
+            openModal(title, `
+                <div class="space-y-3">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <span class="text-xs font-semibold text-slate-500">Vegetation Index (NDVI):</span>
+                        <span class="text-sm font-bold text-agro-600">${ndvi}</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-center">
+                        <span class="text-xs font-semibold text-slate-500">Soil Moisture:</span>
+                        <span class="text-sm font-bold text-blue-600">${moisture}</span>
+                    </div>
+                    <div class="p-3 bg-agro-50 rounded-xl border border-agro-100">
+                        <span class="text-xs font-bold text-agro-900 block mb-1">Vertex AI Diagnostic Note:</span>
+                        <p class="text-xs text-agro-800">${status}</p>
+                    </div>
+                </div>
+            `);
+        }
+
+        // Crop Recommender Simulation
+        function generateCropRecommendations() {
+            const resultsArea = document.getElementById('rec-results-area');
+            resultsArea.innerHTML = `
+                <div class="flex items-center space-x-2 text-agro-700 mb-2">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <span class="text-xs font-bold">Vertex AI processing soil matrix & meteorological forecasting...</span>
+                </div>
+            `;
+
+            setTimeout(() => {
+                resultsArea.innerHTML = `
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold text-slate-900 text-sm">Recommended Regenerative Crop Rotation</h3>
+                            <span class="text-[10px] bg-agro-100 text-agro-800 px-2.5 py-1 rounded-full font-semibold">Match Score: 96.4%</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-seedling text-agro-600"></i> Pearl Millet + Moong Bean</span>
+                                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">Nitrogen Fixing</span>
+                                </div>
+                                <p class="text-xs text-slate-500">Dual intercrop pairing. Moong roots fix atmospheric nitrogen, reducing synthetic urea requirement by 40%.</p>
+                                <div class="text-[11px] text-agro-700 font-semibold pt-1">Water Demand: Low (Rainfed friendly)</div>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-900 text-sm"><i class="fa-solid fa-seedling text-agro-600"></i> Sesbania Cover Crop</span>
+                                    <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">Soil Carbon</span>
+                                </div>
+                                <p class="text-xs text-slate-500">Green manure crop to be tilled back before primary sowing. Enhances soil organic carbon by 0.15% per cycle.</p>
+                                <div class="text-[11px] text-agro-700 font-semibold pt-1">Water Demand: Minimal</div>
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs text-slate-600">
+                            <span class="font-bold text-slate-900 block mb-0.5">Regenerative Impact Projection:</span>
+                            Lowered carbon footprint by 1.4 tons CO2e/hectare while restoring natural topsoil microbiome.
+                        </div>
+                    </div>
+                `;
+                showToast('AI Crop Recommendations generated successfully!');
+            }, 1000);
+        }
+
+        // Scanner Mode Switcher (Upload vs Camera)
         function switchScannerMode(mode) {
-            const uploadBtn = document.getElementById('mode-btn-upload');
-            const cameraBtn = document.getElementById('mode-btn-camera');
-            const uploadContainer = document.getElementById('scanner-upload-container');
-            const cameraContainer = document.getElementById('scanner-camera-container');
+            const uploadBtn = document.getElementById('mode-upload-btn');
+            const cameraBtn = document.getElementById('mode-camera-btn');
+            const uploadContainer = document.getElementById('uploadModeContainer');
+            const cameraContainer = document.getElementById('cameraModeContainer');
 
             if (mode === 'upload') {
-                uploadBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-agri-600 text-agri-700 flex items-center gap-2";
-                cameraBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2";
+                uploadBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white text-slate-800 shadow-sm transition';
+                cameraBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-800 transition';
                 uploadContainer.classList.remove('hidden');
                 cameraContainer.classList.add('hidden');
-                stopWebcam();
+                stopLiveCamera();
             } else {
-                cameraBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-agri-600 text-agri-700 flex items-center gap-2";
-                uploadBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2";
+                cameraBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white text-slate-800 shadow-sm transition';
+                uploadBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 hover:text-slate-800 transition';
                 cameraContainer.classList.remove('hidden');
                 uploadContainer.classList.add('hidden');
-                startWebcam();
             }
         }
 
-        function startWebcam() {
+        // Live Camera Stream Controller
+        let webcamStream = null;
+        function startLiveCamera() {
             const videoElement = document.getElementById('webcamVideo');
+            const placeholder = document.getElementById('cameraPlaceholder');
+            const controls = document.getElementById('cameraControls');
+
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
                 navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
                     .then(stream => {
-                        currentStream = stream;
+                        webcamStream = stream;
                         videoElement.srcObject = stream;
+                        videoElement.classList.remove('hidden');
+                        placeholder.classList.add('hidden');
+                        controls.classList.remove('hidden');
+                        showToast('Live camera stream started successfully.');
                     })
                     .catch(err => {
-                        alert("Unable to access camera. Please use file upload instead.");
-                        switchScannerMode('upload');
+                        console.error('Webcam error:', err);
+                        showToast('Unable to access webcam. Please check permissions.');
                     });
-            }
-        }
-
-        function stopWebcam() {
-            if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
-                currentStream = null;
-            }
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('upload-placeholder').classList.add('hidden');
-                    const preview = document.getElementById('image-preview-container');
-                    preview.classList.remove('hidden');
-                    document.getElementById('selectedLeafImg').src = e.target.result;
-                    simulateDiagnosis('Uploaded Leaf Sample');
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function resetImageUpload() {
-            document.getElementById('leafImageInput').value = '';
-            document.getElementById('image-preview-container').classList.add('hidden');
-            document.getElementById('upload-placeholder').classList.remove('hidden');
-        }
-
-        function loadSampleScan(type) {
-            switchScannerMode('upload');
-            const preview = document.getElementById('image-preview-container');
-            document.getElementById('upload-placeholder').classList.add('hidden');
-            preview.classList.remove('hidden');
-            
-            const img = document.getElementById('selectedLeafImg');
-            if(type === 'blight') {
-                img.src = 'https://images.unsplash.com/photo-1530183170791-2b5999ac6da9?auto=format&fit=crop&w=600&q=80';
-                simulateDiagnosis('Early Leaf Blight (Alternaria solani)');
-            } else if(type === 'nitrogen') {
-                img.src = 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?auto=format&fit=crop&w=600&q=80';
-                simulateDiagnosis('Nitrogen Deficiency / Chlorosis');
             } else {
-                img.src = 'https://images.unsplash.com/photo-1628352081506-83c43123ed67?auto=format&fit=crop&w=600&q=80';
-                simulateDiagnosis('Healthy Crop Leaf (Vigor Index Optimal)');
+                showToast('Camera stream not supported in this browser.');
+            }
+        }
+
+        function stopLiveCamera() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach(track => track.stop());
+                webcamStream = null;
+                const videoElement = document.getElementById('webcamVideo');
+                const placeholder = document.getElementById('cameraPlaceholder');
+                const controls = document.getElementById('cameraControls');
+                if (videoElement) videoElement.classList.add('hidden');
+                if (placeholder) placeholder.classList.remove('hidden');
+                if (controls) controls.classList.add('hidden');
             }
         }
 
         function captureWebcamSnapshot() {
             const video = document.getElementById('webcamVideo');
-            const canvas = document.getElementById('webcamCanvas');
-            canvas.width = video.videoWidth || 640;
-            canvas.height = video.videoHeight || 480;
+            const canvas = document.getElementById('snapshotCanvas');
+            canvas.width = video.videoWidth || 400;
+            canvas.height = video.videoHeight || 300;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
+            const dataURL = canvas.toDataURL('image/png');
+
+            // Switch view to preview the snapshot
             switchScannerMode('upload');
-            document.getElementById('upload-placeholder').classList.add('hidden');
-            document.getElementById('image-preview-container').classList.remove('hidden');
-            document.getElementById('selectedLeafImg').src = canvas.toDataURL('image/png');
-            simulateDiagnosis('Live Camera Captured Leaf Analysis');
+            document.getElementById('uploadPlaceholder').classList.add('hidden');
+            const preview = document.getElementById('imagePreview');
+            preview.src = dataURL;
+            document.getElementById('imagePreviewContainer').classList.remove('hidden');
+
+            runGeminiVisionAnalysis('Live Camera Leaf Scan');
         }
 
-        function simulateDiagnosis(conditionName) {
-            const content = document.getElementById('diagnosis-content');
-            content.innerHTML = `
-                <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <h5 class="font-bold text-slate-900 text-base">${conditionName}</h5>
-                        <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">Confidence: 96.4%</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        Gemini Vision analyzed leaf discoloration patterns and vein chlorosis. Detected early pathogen stress.
-                    </p>
-                    <div class="pt-2 border-t border-slate-100 space-y-1.5 text-xs">
-                        <p class="font-bold text-slate-800"><i class="fa-solid fa-seedling text-agri-600 mr-1.5"></i> Recommended Organic Remedy:</p>
-                        <p class="text-slate-600 pl-5">Apply Neem Oil extract (5ml/liter) and Bacillus subtilis bio-fungicide spray during early morning hours.</p>
-                    </div>
+        // Image upload simulation for Crop Doctor
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                    runGeminiVisionAnalysis('Uploaded Leaf Scan');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function loadSampleScan(type) {
+            switchScannerMode('upload');
+            document.getElementById('uploadPlaceholder').classList.add('hidden');
+            const preview = document.getElementById('imagePreview');
+            let diagnosisName = '';
+            
+            if (type === 'blight') {
+                preview.src = 'https://placehold.co/400x300/1e293b/22c55e?text=Leaf+Blight+Infection';
+                diagnosisName = 'Early Leaf Blight (Fungal)';
+            } else if (type === 'nitrogen') {
+                preview.src = 'https://placehold.co/400x300/1e293b/eab308?text=Nitrogen+Deficiency';
+                diagnosisName = 'Nitrogen Chlorosis (Yellowing)';
+            } else {
+                preview.src = 'https://placehold.co/400x300/1e293b/15803d?text=Healthy+Regenerative+Leaf';
+                diagnosisName = 'Healthy Crop (Optimal Biome)';
+            }
+            
+            document.getElementById('imagePreviewContainer').classList.remove('hidden');
+            runGeminiVisionAnalysis(diagnosisName);
+        }
+
+        function runGeminiVisionAnalysis(scanTitle) {
+            const results = document.getElementById('diagnosis-results');
+            results.innerHTML = `
+                <div class="flex items-center space-x-2 text-agro-700 py-6">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <span class="text-xs font-bold">Gemini Multimodal Agent analyzing leaf necrosis & cellular stress...</span>
                 </div>
             `;
+
+            setTimeout(() => {
+                let diagHtml = '';
+                if (scanTitle.includes('Blight') || scanTitle.includes('Scan')) {
+                    diagHtml = `
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-red-600 text-sm"><i class="fa-solid fa-triangle-exclamation"></i> Diagnosis: Early Leaf Blight (Alternaria solani)</span>
+                                <span class="text-[10px] bg-red-100 text-red-800 px-2 py-0.5 rounded-full font-semibold">Severity: Moderate / 94.8%</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Concentric dark necrotic lesions with chlorotic halos detected on foliage.</p>
+                            
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                                <span class="text-xs font-bold text-slate-900 block"><i class="fa-solid fa-hand-holding-medical text-agro-600 mr-1"></i> Easy Organic Solution / Remedies:</span>
+                                <p class="text-xs text-slate-600">1. Spray fermented buttermilk (chaas) combined with copper-free bio-fungicide.<br>2. Apply Neem oil spray (5ml per liter of water) during early morning.</p>
+                            </div>
+
+                            <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 space-y-1">
+                                <span class="text-xs font-bold text-amber-900 block"><i class="fa-solid fa-shield-halved text-amber-600 mr-1"></i> Preventive Measures to Take Next:</span>
+                                <p class="text-xs text-amber-800">1. Avoid overhead sprinkler irrigation; switch to drip watering.<br>2. Practice a 3-year crop rotation with non-host legumes.<br>3. Remove and compost severely infected lower leaves.</p>
+                            </div>
+                        </div>
+                    `;
+                } else if (scanTitle.includes('Nitrogen') || scanTitle.includes('Chlorosis')) {
+                    diagHtml = `
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-amber-600 text-sm"><i class="fa-solid fa-triangle-exclamation"></i> Diagnosis: Nitrogen Deficiency (Chlorosis)</span>
+                                <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-semibold">Severity: Mild / 97.2%</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Uniform yellowing of older lower leaves due to restricted root uptake.</p>
+                            
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                                <span class="text-xs font-bold text-slate-900 block"><i class="fa-solid fa-hand-holding-medical text-agro-600 mr-1"></i> Easy Organic Solution / Remedies:</span>
+                                <p class="text-xs text-slate-600">1. Apply nutrient-rich vermicompost slurry directly to the root zone.<br>2. Spray Azotobacter bio-fertilizer to accelerate nitrogen fixation.</p>
+                            </div>
+
+                            <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 space-y-1">
+                                <span class="text-xs font-bold text-amber-900 block"><i class="fa-solid fa-shield-halved text-amber-600 mr-1"></i> Preventive Measures to Take Next:</span>
+                                <p class="text-xs text-amber-800">1. Introduce sunn hemp or pulse cover crops between growing cycles.<br>2. Test soil pH regularly to ensure optimal nutrient absorption.</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    diagHtml = `
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-emerald-600 text-sm"><i class="fa-solid fa-check-circle"></i> Diagnosis: Healthy Regenerative Foliage</span>
+                                <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-semibold">Status: Optimal / 99.1%</span>
+                            </div>
+                            <p class="text-xs text-slate-600">Chlorophyll index is exceptional. No pathogen or nutrient deficiency detected.</p>
+                            
+                            <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                                <span class="text-xs font-bold text-slate-900 block"><i class="fa-solid fa-seedling text-agro-600 mr-1"></i> Maintenance Protocol:</span>
+                                <p class="text-xs text-slate-600">Maintain current moisture level and continue scheduled microbial inoculant application.</p>
+                            </div>
+
+                            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 space-y-1">
+                                <span class="text-xs font-bold text-emerald-900 block"><i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Preventive Measures to Take Next:</span>
+                                <p class="text-xs text-emerald-800">1. Continue mulching to suppress weed emergence.<br>2. Monitor soil moisture sensors weekly.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                results.innerHTML = diagHtml;
+                showToast('Gemini Multimodal scan analysis complete!');
+            }, 1200);
         }
 
-        function generateRegenerativePlan() {
-            alert("Vertex AI has successfully refreshed regional soil carbon parameters and updated your customized intercropping rotation plan!");
+        // Voice extension simulation
+        let isRecording = false;
+        function toggleVoiceRecording() {
+            isRecording = !isRecording;
+            const micBtn = document.getElementById('micButton');
+            const micPulse = document.getElementById('micPulse');
+            const statusText = document.getElementById('voiceStatusText');
+            const waveform = document.getElementById('waveformSim');
+
+            if (isRecording) {
+                micBtn.classList.remove('bg-agro-600', 'hover:bg-agro-500');
+                micBtn.classList.add('bg-red-600', 'hover:bg-red-500');
+                micPulse.classList.add('animate-ping');
+                statusText.innerText = 'Listening to your query...';
+                waveform.classList.remove('opacity-40');
+                waveform.classList.add('opacity-100');
+
+                setTimeout(() => {
+                    if (isRecording) {
+                        toggleVoiceRecording();
+                        appendVoiceMessage('Gujarati Farmer', 'મારા ખેતરમાં બાજરીના પાક માટે ક્યારે સિંચાઈ કરવી જોઈએ?');
+                        setTimeout(() => {
+                            appendVoiceMessage('AgriN AI Agent', 'આજે હળવો વરસાદ અપેક્ષિત છે, તેથી સિંચાઈ આવતીકાલે સવારે કરો. (Light rain expected today; irrigate tomorrow morning.)');
+                            showToast('Voice advisory spoken in regional language!');
+                        }, 1000);
+                    }
+                }, 3000);
+            } else {
+                micBtn.classList.remove('bg-red-600', 'hover:bg-red-500');
+                micBtn.classList.add('bg-agro-600', 'hover:bg-agro-500');
+                micPulse.classList.remove('animate-ping');
+                statusText.innerText = 'Tap to Speak Query';
+                waveform.classList.add('opacity-40');
+                waveform.classList.remove('opacity-100');
+            }
         }
 
-        function changeLanguage(langCode) {
-            // Simple notification or integration placeholder
-            console.log("Language changed to: " + langCode);
+        function sendVoiceTextQuery() {
+            const input = document.getElementById('voiceTextInput');
+            if (input.value.trim() !== '') {
+                const text = input.value;
+                input.value = '';
+                appendVoiceMessage('User (Extension Worker)', text);
+                setTimeout(() => {
+                    appendVoiceMessage('AgriN AI Agent', 'Received query. Based on Vertex AI soil telemetry, applying organic mulch will retain 30% more moisture.');
+                    showToast('Voice agent responded successfully.');
+                }, 800);
+            }
+        }
+
+        function appendVoiceMessage(sender, text) {
+            const transcript = document.getElementById('chatTranscript');
+            const isAI = sender.includes('AI');
+            const div = document.createElement('div');
+            div.className = `flex items-start space-x-3 ${isAI ? '' : 'justify-end'}`;
+            
+            div.innerHTML = `
+                ${isAI ? '<div class="w-8 h-8 rounded-full bg-agro-100 text-agro-700 flex items-center justify-center font-bold text-xs">AI</div>' : ''}
+                <div class="${isAI ? 'bg-white text-slate-700 border border-slate-200' : 'bg-agro-600 text-white'} p-4 rounded-2xl text-sm shadow-sm max-w-lg">
+                    <span class="text-[10px] font-bold block mb-1 opacity-70">${sender}</span>
+                    ${text}
+                </div>
+                ${!isAI ? '<div class="w-8 h-8 rounded-full bg-agro-800 text-white flex items-center justify-center font-bold text-xs">U</div>' : ''}
+            `;
+            transcript.appendChild(div);
+            transcript.scrollTop = transcript.scrollHeight;
+        }
+
+        // Cross-State Grid Sync
+        function syncAllNodes() {
+            const icon = document.getElementById('syncGridIcon');
+            icon.classList.add('fa-spin');
+            showToast('Synchronizing decentralized agricultural models across state nodes...');
+            setTimeout(() => {
+                icon.classList.remove('fa-spin');
+                showToast('All 5 state nodes successfully synchronized with ICAR Master Hub!');
+            }, 1500);
+        }
+
+        // Modal Helpers
+        function openModal(title, htmlContent) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalBody').innerHTML = htmlContent;
+            document.getElementById('appModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('appModal').classList.add('hidden');
+        }
+
+        function showApiDocModal() {
+            openModal('AgriN Interoperable API Specification', `
+                <div class="space-y-3 text-xs text-slate-600">
+                    <p>The AgriN DPG network exposes standard RESTful endpoints for state agricultural departments:</p>
+                    <div class="bg-slate-900 text-agro-300 p-3 rounded-xl font-mono text-[11px] overflow-x-auto">
+                        GET /api/v1/soil/telemetry?state=gujarat&district=anand<br>
+                        POST /api/v1/crop/recommendation-matrix<br>
+                        POST /api/v1/vision/plant-diagnose
+                    </div>
+                    <p>Authentication via OAuth2 token exchange with National Agricultural Data Grid.</p>
+                </div>
+            `);
+        }
+
+        function openNotificationModal() {
+            openModal('Network Broadcasts & Alerts', `
+                <div class="space-y-3 text-xs">
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                        <span class="font-bold text-slate-900 block">ICAR Advisory #412</span>
+                        <p class="text-slate-600 mt-0.5">Monsoon advance forecasted across Western and Central zones. Cover crop seeding recommended immediately.</p>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                        <span class="font-bold text-slate-900 block">Carbon Credit Verification</span>
+                        <p class="text-slate-600 mt-0.5">Batch #882 organic certification approved for 1,420 marginal farmers.</p>
+                    </div>
+                </div>
+            `);
+        }
+
+        function showInfoToast(msg) {
+            showToast(msg);
+        }
+
+        // Toast Helper
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
         }
     </script>
 </body>
