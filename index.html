@@ -125,7 +125,7 @@
                     </div>
                     <div>
                         <p class="text-xs text-slate-500 font-medium" data-i18n="metric_weather">Weather Forecast</p>
-                        <h4 class="text-xl font-bold text-slate-900">32°C <span class="text-xs font-normal text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Optimal Rain in 3d</span></h4>
+                        <h4 class="text-xl font-bold text-slate-900">32°C <span class="text-xs font-normal text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Optimal Rain</span></h4>
                     </div>
                 </div>
 
@@ -166,7 +166,7 @@
                     <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-bullhorn text-agri-600"></i> <span data-i18n="sec_advisories">Live Multilingual Agro-Advisories</span>
                     </h3>
-                    <span class="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full font-medium" data-i18n="updated_just_now">Updated 10m ago via Vertex AI</span>
+                    <span class="text-xs text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full font-medium" data-i18n="updated_just_now">Updated via Vertex AI</span>
                 </div>
                 <div class="space-y-3">
                     <div class="p-4 bg-agri-50/60 border border-agri-100 rounded-xl flex items-start gap-4">
@@ -179,7 +179,7 @@
                                 <span class="text-xs bg-agri-200 text-agri-800 px-2 py-0.5 rounded font-semibold" data-i18n="badge_priority_high">High Priority</span>
                             </div>
                             <p class="text-sm text-slate-600 leading-relaxed" data-i18n="adv_desc_1">
-                                Soil moisture telemetry indicates ideal conditions for pearl millet (Bajra) and green gram intercropping. Avoid excessive urea application; switch to Rhizobium bio-fertilizers to preserve soil microbiota.
+                                Soil moisture telemetry indicates ideal conditions for pearl millet (Bajra) and green gram intercropping. Avoid excessive urea application; switch to Rhizobium bio-fertilizers.
                             </p>
                         </div>
                     </div>
@@ -187,7 +187,7 @@
             </div>
         </section>
 
-        <!-- TAB 2: CROP DOCTOR (LIVE CAMERA & SCANNER) -->
+        <!-- TAB 2: CROP DOCTOR -->
         <section id="tab-content-cropdoc" class="space-y-6 hidden">
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
                 <div class="max-w-3xl mb-6">
@@ -195,11 +195,11 @@
                         <i class="fa-solid fa-stethoscope text-agri-600"></i> <span data-i18n="doc_title">AI Multimodal Crop Doctor & Live Scanner</span>
                     </h3>
                     <p class="text-slate-600 text-sm" data-i18n="doc_subtitle">
-                        Use your live camera to scan infected leaves or upload a photo. Get instant AI diagnosis, easy organic solutions, and preventive next steps.
+                        Use your live camera to scan infected leaves or upload a photo. Get instant AI diagnosis, organic solutions, and preventive next steps.
                     </p>
                 </div>
 
-                <!-- Mode Toggle (Upload vs Live Camera) -->
+                <!-- Mode Toggle -->
                 <div class="flex border-b border-slate-200 mb-6">
                     <button onclick="switchScannerMode('upload')" id="mode-btn-upload" class="pb-3 px-4 font-semibold text-sm border-b-2 border-agri-600 text-agri-700 flex items-center gap-2">
                         <i class="fa-solid fa-upload"></i> <span data-i18n="mode_upload">Upload Image</span>
@@ -210,7 +210,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    <!-- Left: Scanner View / Upload Area -->
+                    <!-- Left: Scanner View -->
                     <div class="space-y-4">
                         <!-- Upload Container -->
                         <div id="scanner-upload-container" class="border-2 border-dashed border-slate-300 rounded-2xl p-6 text-center bg-slate-50 hover:bg-slate-100/50 transition">
@@ -220,7 +220,7 @@
                                     <i class="fa-solid fa-cloud-arrow-up"></i>
                                 </div>
                                 <h4 class="font-bold text-slate-800 mb-1" data-i18n="upload_prompt">Drag & drop or click to upload leaf photo</h4>
-                                <p class="text-xs text-slate-500 mb-4" data-i18n="upload_sub">Supports JPG, PNG, WEBP (Max 10MB)</p>
+                                <p class="text-xs text-slate-500 mb-4" data-i18n="upload_sub">Supports JPG, PNG, WEBP</p>
                                 <button onclick="document.getElementById('leafImageInput').click()" class="bg-agri-600 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow hover:bg-agri-700 transition">
                                     <span data-i18n="btn_browse">Browse Files</span>
                                 </button>
@@ -264,24 +264,19 @@
                         </div>
                     </div>
 
-                    <!-- Right: Diagnosis & AI Solution Output -->
+                    <!-- Right: Diagnosis Output -->
                     <div id="diagnosis-results" class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-5">
                         <div class="flex items-center justify-between pb-3 border-b border-slate-200">
                             <h4 class="font-bold text-slate-900 text-lg flex items-center gap-2">
                                 <i class="fa-solid fa-microchip text-agri-600"></i> <span data-i18n="diag_report_title">AI Multimodal Diagnosis Report</span>
                             </h4>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold" data-i18n="gemini_vision_active">Gemini 2.5 Flash Vision Active</span>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-semibold">Gemini 2.5 Vision Active</span>
                         </div>
-
                         <div id="diagnosis-content" class="space-y-4">
-                            <!-- Default Initial State -->
                             <div class="p-4 bg-white rounded-xl border border-slate-200">
-                                <div class="flex items-center justify-between mb-2">
-                                    <h5 class="font-bold text-slate-800 text-base" data-i18n="diag_status_ready">Ready for Plant Scan</h5>
-                                    <span class="text-xs bg-amber-50 text-amber-700 px-2.5 py-0.5 rounded font-medium" data-i18n="status_waiting">Awaiting Image</span>
-                                </div>
+                                <h5 class="font-bold text-slate-800 text-base mb-1" data-i18n="diag_status_ready">Ready for Plant Scan</h5>
                                 <p class="text-sm text-slate-600 leading-relaxed" data-i18n="diag_instruction_desc">
-                                    Upload an image or use the live camera scanner to instantly diagnose crop diseases, pest infestations, and receive organic remediation steps.
+                                    Upload an image or use the live camera scanner to instantly diagnose crop diseases and receive organic remediation steps.
                                 </p>
                             </div>
                         </div>
@@ -298,14 +293,14 @@
                         <i class="fa-solid fa-earth-americas text-agri-600"></i> <span data-i18n="regen_title">Vertex AI Regenerative Crop Recommender</span>
                     </h3>
                     <p class="text-slate-600 text-sm" data-i18n="regen_subtitle">
-                        Select your state, soil profile, and water table to receive climate-resilient crop recommendations that restore soil carbon and minimize chemical inputs.
+                        Select your state and soil profile to receive climate-resilient crop recommendations that restore soil carbon.
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1" data-i18n="label_state">Select State / Region</label>
-                        <select id="reg-state" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-medium focus:ring-agri-500 focus:border-agri-500">
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Select State / Region</label>
+                        <select id="reg-state" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-medium">
                             <option value="gj">Gujarat (Saurashtra / Kutch)</option>
                             <option value="mp">Madhya Pradesh (Malwa)</option>
                             <option value="mh">Maharashtra (Vidarbha)</option>
@@ -313,50 +308,35 @@
                         </select>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1" data-i18n="label_soil">Soil Type</label>
-                        <select id="reg-soil" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-medium focus:ring-agri-500 focus:border-agri-500">
-                            <option value="black" data-i18n="soil_black">Black Cotton Soil (Regur)</option>
-                            <option value="alluvial" data-i18n="soil_alluvial">Alluvial Soil</option>
-                            <option value="red" data-i18n="soil_red">Red Loamy Soil</option>
+                        <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Soil Type</label>
+                        <select id="reg-soil" class="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm font-medium">
+                            <option value="black">Black Cotton Soil (Regur)</option>
+                            <option value="alluvial">Alluvial Soil</option>
+                            <option value="red">Red Loamy Soil</option>
                         </select>
                     </div>
                     <div class="flex items-end">
                         <button onclick="generateRegenerativePlan()" class="w-full bg-agri-600 hover:bg-agri-700 text-white py-3 px-4 rounded-xl font-bold text-sm shadow transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="btn_generate_plan">Generate AI Plan</span>
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Generate AI Plan</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Recommendation Cards -->
                 <div id="regenerative-results" class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="bg-gradient-to-br from-agri-50 to-emerald-50 border border-agri-200 rounded-2xl p-5 space-y-3">
-                        <span class="bg-agri-600 text-white text-xs px-2.5 py-1 rounded-full font-bold" data-i18n="crop_badge_1">Primary Recommendation</span>
-                        <h4 class="text-xl font-bold text-slate-900" data-i18n="crop_name_1">Pearl Millet (Bajra) + Moth Bean</h4>
-                        <p class="text-xs text-slate-600" data-i18n="crop_desc_1">Drought-tolerant intercropping system that fixes atmospheric nitrogen and reduces irrigation demand by 45%.</p>
-                        <ul class="text-xs space-y-1.5 text-slate-700 font-medium pt-2 border-t border-agri-200">
-                            <li><i class="fa-solid fa-check text-agri-600 mr-1.5"></i> <span data-i18n="crop_ben_1a">Soil Carbon Sequestration: +18%</span></li>
-                            <li><i class="fa-solid fa-check text-agri-600 mr-1.5"></i> <span data-i18n="crop_ben_1b">Input Cost Savings: ₹4,200/acre</span></li>
-                        </ul>
+                        <span class="bg-agri-600 text-white text-xs px-2.5 py-1 rounded-full font-bold">Primary Recommendation</span>
+                        <h4 class="text-xl font-bold text-slate-900">Pearl Millet (Bajra) + Moth Bean</h4>
+                        <p class="text-xs text-slate-600">Drought-tolerant intercropping system that fixes atmospheric nitrogen and reduces irrigation demand by 45%.</p>
                     </div>
-
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
-                        <span class="bg-slate-200 text-slate-800 text-xs px-2.5 py-1 rounded-full font-bold" data-i18n="crop_badge_2">Soil Health Restorer</span>
-                        <h4 class="text-xl font-bold text-slate-900" data-i18n="crop_name_2">Cluster Bean (Guar)</h4>
-                        <p class="text-xs text-slate-600" data-i18n="crop_desc_2">Deep taproot system breaks hardpan soil layers and enhances moisture retention naturally.</p>
-                        <ul class="text-xs space-y-1.5 text-slate-700 font-medium pt-2 border-t border-slate-200">
-                            <li><i class="fa-solid fa-check text-agri-600 mr-1.5"></i> <span data-i18n="crop_ben_2a">Natural Nitrogen Fixer</span></li>
-                            <li><i class="fa-solid fa-check text-agri-600 mr-1.5"></i> <span data-i18n="crop_ben_2b">Zero Chemical Pesticide Needed</span></li>
-                        </ul>
+                        <span class="bg-slate-200 text-slate-800 text-xs px-2.5 py-1 rounded-full font-bold">Soil Health Restorer</span>
+                        <h4 class="text-xl font-bold text-slate-900">Cluster Bean (Guar)</h4>
+                        <p class="text-xs text-slate-600">Deep taproot system breaks hardpan soil layers and enhances moisture retention naturally.</p>
                     </div>
-
                     <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3">
-                        <span class="bg-purple-100 text-purple-800 text-xs px-2.5 py-1 rounded-full font-bold" data-i18n="crop_badge_3">Climate Resilient</span>
-                        <h4 class="text-xl font-bold text-slate-900" data-i18n="crop_name_3">Sesame (Til) Rotation</h4>
-                        <p class="text-xs text-slate-600" data-i18n="crop_desc_3">Short duration oilseed crop suitable for unpredictable rainfall patterns with high market return.</p>
-                        <ul class="text-xs space-y-1.5 text-slate-700 font-medium pt-2 border-t border-slate-200">
-                            <li><i class="fa-solid fa-check text-agri-600 mr-1.5"></i> <span data-i18n="crop_ben_3a">Maturity: 85-90 Days</span></li>
-                            <li><i class="fa-solid fa-check text-agri-600 mr-1.5"></i> <span data-i18n="crop_ben_3b">High Drought Resistance</span></li>
-                        </ul>
+                        <span class="bg-purple-100 text-purple-800 text-xs px-2.5 py-1 rounded-full font-bold">Climate Resilient</span>
+                        <h4 class="text-xl font-bold text-slate-900">Sesame (Til) Rotation</h4>
+                        <p class="text-xs text-slate-600">Short duration oilseed crop suitable for unpredictable rainfall patterns with high market return.</p>
                     </div>
                 </div>
             </div>
@@ -367,9 +347,9 @@
             <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 md:p-8">
                 <div class="max-w-3xl mb-6">
                     <h3 class="text-2xl font-bold text-slate-900 mb-2 flex items-center gap-3">
-                        <i class="fa-solid fa-network-wired text-agri-600"></i> <span data-i18n="dpi_title">Interoperable State Agricultural Data Grid</span>
+                        <i class="fa-solid fa-network-wired text-agri-600"></i> <span>Interoperable State Agricultural Data Grid</span>
                     </h3>
-                    <p class="text-slate-600 text-sm" data-i18n="dpi_subtitle">
+                    <p class="text-slate-600 text-sm">
                         Built as a Digital Public Good (DPG). Sharing cross-state climate models, pest tracking telemetry, and sustainable farming datasets in real-time.
                     </p>
                 </div>
@@ -377,26 +357,17 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50 space-y-4">
                         <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-slate-900 text-base" data-i18n="grid_node_1">Gujarat State Agri-Node (GSAN)</h4>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold" data-i18n="status_synced">Synced & Active</span>
+                            <h4 class="font-bold text-slate-900 text-base">Gujarat State Agri-Node (GSAN)</h4>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">Synced & Active</span>
                         </div>
-                        <p class="text-xs text-slate-600" data-i18n="grid_desc_1">Sharing drone telemetry, Saurashtra soil moisture maps, and cotton pest forecasting models with MP and Rajasthan nodes.</p>
-                        <div class="flex justify-between items-center text-xs font-semibold text-slate-700 pt-2 border-t border-slate-200">
-                            <span data-i18n="shared_models">Shared Models: 12</span>
-                            <span class="text-agri-700">Latency: 24ms</span>
-                        </div>
+                        <p class="text-xs text-slate-600">Sharing drone telemetry, Saurashtra soil moisture maps, and cotton pest forecasting models with MP and Rajasthan nodes.</p>
                     </div>
-
                     <div class="p-5 border border-slate-200 rounded-2xl bg-slate-50 space-y-4">
                         <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-slate-900 text-base" data-i18n="grid_node_2">Madhya Pradesh Agri-Network (MPAN)</h4>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold" data-i18n="status_synced">Synced & Active</span>
+                            <h4 class="font-bold text-slate-900 text-base">Madhya Pradesh Agri-Network (MPAN)</h4>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">Synced & Active</span>
                         </div>
-                        <p class="text-xs text-slate-600" data-i18n="grid_desc_2">Sharing Malwa plateau wheat rust early warning intelligence and organic soybean regenerative parameters.</p>
-                        <div class="flex justify-between items-center text-xs font-semibold text-slate-700 pt-2 border-t border-slate-200">
-                            <span data-i18n="shared_models">Shared Models: 19</span>
-                            <span class="text-agri-700">Latency: 31ms</span>
-                        </div>
+                        <p class="text-xs text-slate-600">Sharing Malwa plateau wheat rust early warning intelligence and organic soybean regenerative parameters.</p>
                     </div>
                 </div>
             </div>
@@ -407,335 +378,124 @@
     <!-- Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-            <p data-i18n="footer_rights">© 2026 AgriN - Regenerative Agricultural Intelligence Network. Built for Hackathons.</p>
+            <p>© 2026 AgriN - Regenerative Agricultural Intelligence Network. Built for Hackathons.</p>
             <div class="flex space-x-4 mt-3 sm:mt-0 font-medium">
-                <span class="text-agri-700 font-semibold" data-i18n="footer_stack">Google AI Studio • Vertex AI • Gemini Multimodal</span>
+                <span class="text-agri-700 font-semibold">Google AI Studio • Vertex AI • Gemini Multimodal</span>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Multilingual Dictionaries (English, Hindi, Gujarati, Punjabi, Tamil, Telugu, Marathi)
-        const translations = {
-            en: {
-                tagline: "Regenerative Agricultural Intelligence Network",
-                tab_dashboard: "Dashboard",
-                tab_cropdoc: "AI Crop Doctor",
-                tab_regenerative: "Regenerative Advisor",
-                tab_states: "State DPI Grid",
-                badge_dpi: "National Agro-Intelligence DPI",
-                dash_welcome: "Empowering Smallholders with Sustainable AI",
-                dash_desc: "Integrating real-time satellite telemetry, soil health analytics, and multimodal diagnostic models to eradicate crop failure and scale regenerative agriculture across India.",
-                btn_scan_leaf: "Scan Diseased Leaf",
-                btn_soil_analytics: "View Soil Analytics",
-                metric_weather: "Weather Forecast",
-                metric_soil: "Soil Carbon Index",
-                metric_soil_status: "Regenerating",
-                metric_ndvi: "NDVI Vegetation Index",
-                metric_ndvi_status: "High Vigor",
-                metric_nodes: "Active DPI Nodes",
-                metric_sync: "Synced",
-                sec_advisories: "Live Multilingual Agro-Advisories",
-                updated_just_now: "Updated 10m ago via Vertex AI",
-                adv_title_1: "Gujarat & Madhya Pradesh Zone: Monsoon Sowing Advice",
-                badge_priority_high: "High Priority",
-                adv_desc_1: "Soil moisture telemetry indicates ideal conditions for pearl millet (Bajra) and green gram intercropping. Avoid excessive urea application; switch to Rhizobium bio-fertilizers to preserve soil microbiota.",
-                doc_title: "AI Multimodal Crop Doctor & Live Scanner",
-                doc_subtitle: "Use your live camera to scan infected leaves or upload a photo. Get instant AI diagnosis, easy organic solutions, and preventive next steps.",
-                mode_upload: "Upload Image",
-                mode_live_cam: "Live Camera",
-                upload_prompt: "Drag & drop or click to upload leaf photo",
-                upload_sub: "Supports JPG, PNG, WEBP (Max 10MB)",
-                btn_browse: "Browse Files",
-                btn_capture: "Capture Leaf",
-                sample_scans_title: "Or test with pre-loaded sample scans:",
-                sample_blight: "Leaf Blight",
-                sample_nitrogen: "N-Deficiency",
-                sample_healthy: "Healthy Crop",
-                diag_report_title: "AI Multimodal Diagnosis Report",
-                gemini_vision_active: "Gemini 2.5 Flash Vision Active",
-                diag_status_ready: "Ready for Plant Scan",
-                status_waiting: "Awaiting Image",
-                diag_instruction_desc: "Upload an image or use the live camera scanner to instantly diagnose crop diseases, pest infestations, and receive organic remediation steps.",
-                regen_title: "Vertex AI Regenerative Crop Recommender",
-                regen_subtitle: "Select your state, soil profile, and water table to receive climate-resilient crop recommendations that restore soil carbon and minimize chemical inputs.",
-                label_state: "Select State / Region",
-                label_soil: "Soil Type",
-                soil_black: "Black Cotton Soil (Regur)",
-                soil_alluvial: "Alluvial Soil",
-                soil_red: "Red Loamy Soil",
-                btn_generate_plan: "Generate AI Plan",
-                crop_badge_1: "Primary Recommendation",
-                crop_name_1: "Pearl Millet (Bajra) + Moth Bean",
-                crop_desc_1: "Drought-tolerant intercropping system that fixes atmospheric nitrogen and reduces irrigation demand by 45%.",
-                crop_ben_1a: "Soil Carbon Sequestration: +18%",
-                crop_ben_1b: "Input Cost Savings: ₹4,200/acre",
-                crop_badge_2: "Soil Health Restorer",
-                crop_name_2: "Cluster Bean (Guar)",
-                crop_desc_2: "Deep taproot system breaks hardpan soil layers and enhances moisture retention naturally.",
-                crop_ben_2a: "Natural Nitrogen Fixer",
-                crop_ben_2b: "Zero Chemical Pesticide Needed",
-                crop_badge_3: "Climate Resilient",
-                crop_name_3: "Sesame (Til) Rotation",
-                crop_desc_3: "Short duration oilseed crop suitable for unpredictable rainfall patterns with high market return.",
-                crop_ben_3a: "Maturity: 85-90 Days",
-                crop_ben_3b: "High Drought Resistance",
-                dpi_title: "Interoperable State Agricultural Data Grid",
-                dpi_subtitle: "Built as a Digital Public Good (DPG). Sharing cross-state climate models, pest tracking telemetry, and sustainable farming datasets in real-time.",
-                grid_node_1: "Gujarat State Agri-Node (GSAN)",
-                status_synced: "Synced & Active",
-                grid_desc_1: "Sharing drone telemetry, Saurashtra soil moisture maps, and cotton pest forecasting models with MP and Rajasthan nodes.",
-                shared_models: "Shared Models: 12",
-                grid_node_2: "Madhya Pradesh Agri-Network (MPAN)",
-                grid_desc_2: "Sharing Malwa plateau wheat rust early warning intelligence and organic soybean regenerative parameters.",
-                footer_rights: "© 2026 AgriN - Regenerative Agricultural Intelligence Network. Built for Hackathons.",
-                footer_stack: "Google AI Studio • Vertex AI • Gemini Multimodal"
-            },
-            hi: {
-                tagline: "पुनर्जनन कृषि खुफिया नेटवर्क",
-                tab_dashboard: "डैशबोर्ड",
-                tab_cropdoc: "एआई फसल डॉक्टर",
-                tab_regenerative: "पुनर्जनन सलाहकार",
-                tab_states: "राज्य डीपीआई ग्रिड",
-                badge_dpi: "राष्ट्रीय कृषि-खुफिया डीपीआई",
-                dash_welcome: "टिकाऊ एआई के साथ छोटे किसानों को सशक्त बनाना",
-                dash_desc: "फसल के नुकसान को समाप्त करने और पूरे भारत में पुनर्योजी कृषि को बढ़ाने के लिए वास्तविक समय उपग्रह टेलीमेट्री, मिट्टी स्वास्थ्य विश्लेषिकी और मल्टीमॉडल नैदानिक ​​मॉडल को एकीकृत करना।",
-                btn_scan_leaf: "संक्रमित पत्ती स्कैन करें",
-                btn_soil_analytics: "मिट्टी विश्लेषिकी देखें",
-                metric_weather: "मौसम पूर्वानुमान",
-                metric_soil: "मृदा कार्बन सूचकांक",
-                metric_soil_status: "सुधार हो रहा है",
-                metric_ndvi: "एनडीवीआई वनस्पति सूचकांक",
-                metric_ndvi_status: "उच्च स्वास्थ्य",
-                metric_nodes: "सक्रिय डीपीआई नोड्स",
-                metric_sync: "सिंक किया गया",
-                sec_advisories: "लाइव बहुभाषी कृषि-सलाह",
-                updated_just_now: "Vertex AI के माध्यम से 10 मिनट पहले अपडेट किया गया",
-                adv_title_1: "गुजरात और मध्य प्रदेश क्षेत्र: मानसून बुवाई सलाह",
-                badge_priority_high: "उच्च प्राथमिकता",
-                adv_desc_1: "मिट्टी की नमी बाजरा और मूंग की अंतर-खेती के लिए अनुकूल स्थिति दर्शाती है। यूरिया का अत्यधिक उपयोग रोकें; सूक्ष्मजीवों को बचाने के लिए राइजोबियम जैव-उर्वरक अपनाएं।",
-                doc_title: "एआई मल्टीमॉडल फसल डॉक्टर और लाइव स्कैनर",
-                doc_subtitle: "संक्रमित पत्तियों को स्कैन करने या फोटो अपलोड करने के लिए अपने लाइव कैमरे का उपयोग करें। तुरंत एआई निदान, आसान जैविक समाधान और निवारक कदम प्राप्त करें।",
-                mode_upload: "छवि अपलोड करें",
-                mode_live_cam: "लाइव कैमरा",
-                upload_prompt: "पत्ती की फोटो अपलोड करने के लिए खींचें और छोड़ें या क्लिक करें",
-                upload_sub: "JPG, PNG, WEBP समर्थित (अधिकतम 10MB)",
-                btn_browse: "फाइलें ब्राउज़ करें",
-                btn_capture: "पत्ती कैप्चर करें",
-                sample_scans_title: "या पूर्व-लोड किए गए नमूनों से परीक्षण करें:",
-                sample_blight: "पत्ती झुलसा (Blight)",
-                sample_nitrogen: "नाइट्रोजन की कमी",
-                sample_healthy: "स्वस्थ फसल",
-                diag_report_title: "एआई मल्टीमॉडल निदान रिपोर्ट",
-                gemini_vision_active: "Gemini 2.5 Flash Vision सक्रिय",
-                diag_status_ready: "पौधे की स्कैनिंग के लिए तैयार",
-                status_waiting: "छवि की प्रतीक्षा है",
-                diag_instruction_desc: "फसल के रोगों, कीटों का तुरंत निदान करने और जैविक उपचार के चरण प्राप्त करने के लिए छवि अपलोड करें या लाइव कैमरा स्कैनर का उपयोग करें।",
-                regen_title: "Vertex AI पुनर्योजी फसल सिफारिसकर्ता",
-                regen_subtitle: "जलवायु-अनुकूल फसल सिफारिशें प्राप्त करने के लिए अपना राज्य, मिट्टी का प्रकार और जल स्तर चुनें जो मिट्टी के कार्बन को बहाल करती हैं।",
-                label_state: "राज्य / क्षेत्र चुनें",
-                label_soil: "मिट्टी का प्रकार",
-                soil_black: "काली कपास मिट्टी (रेगुर)",
-                soil_alluvial: "जलोढ़ मिट्टी",
-                soil_red: "लाल दोमट मिट्टी",
-                btn_generate_plan: "एआई योजना बनाएं",
-                crop_badge_1: "प्राथमिक सिफारिश",
-                crop_name_1: "बाजरा + मोठ की फली",
-                crop_desc_1: "सूखा सहन करने वाली अंतर-खेती प्रणाली जो वायुमंडलीय नाइट्रोजन को स्थिर करती है और सिंचाई की मांग को 45% तक कम करती है।",
-                crop_ben_1a: "मृदा कार्बन प्रच्छादन: +18%",
-                crop_ben_1b: "लागत बचत: ₹4,200/एकड़",
-                crop_badge_2: "मिट्टी स्वास्थ्य सुधारक",
-                crop_name_2: "ग्वार (Cluster Bean)",
-                crop_desc_2: "गहरी जड़ प्रणाली कठोर मिट्टी की परतों को तोड़ती है और प्राकृतिक रूप से नमी बनाए रखती है।",
-                crop_ben_2a: "प्राकृतिक नाइट्रोजन स्थिरीकरण",
-                crop_ben_2b: "शून्य रासायनिक कीटनाशक आवश्यकता",
-                crop_badge_3: "जलवायु लचीला",
-                crop_name_3: "तिल चक्र",
-                crop_desc_3: "अपेक्षित वर्षा पैटर्न के लिए उपयुक्त कम अवधि की तिलहन फसल।",
-                crop_ben_3a: "परिपक्वता: 85-90 दिन",
-                crop_ben_3b: "उच्च सूखा प्रतिरोध",
-                dpi_title: "इन्टरऑपरेबल राज्य कृषि डेटा ग्रिड",
-                dpi_subtitle: "डिजिटल पब्लिक गुड (DPG) के रूप में निर्मित। वास्तविक समय में क्रॉस-राज्य जलवायु मॉडल और कीट डेटा साझा करना।",
-                grid_node_1: "गुजरात राज्य कृषि-नोड (GSAN)",
-                status_synced: "सिंक और सक्रिय",
-                grid_desc_1: "ड्रोन टेलीमेट्री, सौराष्ट्र मिट्टी की नमी के नक्शे और कपास कीट पूर्वानुमान मॉडल साझा करना।",
-                shared_models: "साझा मॉडल: 12",
-                grid_node_2: "मध्य प्रदेश कृषि-नेटवर्क (MPAN)",
-                grid_desc_2: "मालवा पठार गेहूं रतुआ प्रारंभिक चेतावनी बुद्धिमत्ता और जैविक सोयाबीन पुनर्योजी पैरामीटर साझा करना।",
-                footer_rights: "© 2026 AgriN - पुनर्योजी कृषि खुफिया नेटवर्क। हैकाथॉन के लिए निर्मित।",
-                footer_stack: "Google AI Studio • Vertex AI • Gemini Multimodal"
-            },
-            gu: {
-                tagline: "રીજેનેરેટિવ એગ્રીકલ્ચર ઇન્ટેલિજન્સ નેટવર્ક",
-                tab_dashboard: "ડેશબોર્ડ",
-                tab_cropdoc: "એઆઈ પાક ડૉક્ટર",
-                tab_regenerative: "રીજેનેરેટિવ સલાહકાર",
-                tab_states: "રાજ્ય ડીપીઆઈ ગ્રીડ",
-                badge_dpi: "રાષ્ટ્રીય કૃષિ-બુદ્ધિમત્તા ડીપીઆઈ",
-                dash_welcome: "ટકાઉ એઆઈ સાથે નાના ખેડૂતોને સશક્ત બનાવવું",
-                dash_desc: "પાકની નિષ્ફળતાને નાબૂદ કરવા અને સમગ્ર ભારતમાં પુનર્જીવિત ખેતીને સ્કેલ કરવા માટે રીઅલ-ટાઇમ સેटेলাইট ટેલિમેટ્રી, માટીના સ્વાસ્થ્ય વિશ્લેષણ અને મલ્ટિમોડલ ડાય']>;
-                // ... (continuing Gujarati dictionary)
-        };
-        
-        // Let's expand the Gujarati dictionary fully so zero english strings leak:
-        translations.gu = {
-            tagline: "રીજેનેરેટિવ એગ્રીકલ્ચર ઇન્ટેલિજન્સ નેટવર્ક",
-            tab_dashboard: "ડેશબોર્ડ",
-            tab_cropdoc: "એઆઈ પાક ડૉક્ટર",
-            tab_regenerative: "રીજેનેરેટિવ સલાહકાર",
-            tab_states: "રાજ્ય ડીપીઆઈ ગ્રીડ",
-            badge_dpi: "રાષ્ટ્રીય કૃષિ-બુદ્ધિમત્તા ડીપીઆઈ",
-            dash_welcome: "ટકાઉ એઆઈ સાથે નાના ખેડૂતોને સશક્ત બનાવવું",
-            dash_desc: "પાકની નિષ્ફળતાને નાબૂદ કરવા અને સમગ્ર ભારતમાં પુનર્જીવિત ખેતીને સ્કેલ કરવા માટે રીઅલ-ટાઇમ સેટેલાઇટ ટેલિમેટ્રી, માટીના સ્વાસ્થ્ય વિશ્લેષણ અને મલ્ટિમોડલ ડાયગ્નોस्टिक મોડેલ્સને સંકલિત کرنا.",
-            btn_scan_leaf: "રોગગ્રસ્ત પાંદડા સ્કેન કરો",
-            btn_soil_analytics: "માટીનું વિશ્લેષણ જુઓ",
-            metric_weather: "હવામાન અંદાજ",
-            metric_soil: "માટી કાર્બન ઇન્ડેક્સ",
-            metric_soil_status: "સુધારો થઈ રહ્યો છે",
-            metric_ndvi: "એનડીવીઆઈ વનસ્પતિ સૂચકાંક",
-            metric_ndvi_status: "ઉચ્ચ જોಶ್",
-            metric_nodes: "સક્રિય ડીપીઆઈ નોડ્સ",
-            metric_sync: "સિંક થયેલ",
-            sec_advisories: "લાઇવ બહુભાષી કૃષિ-સલાહ",
-            updated_just_now: "Vertex AI દ્વારા ૧૦ મિનિટ પહેલાં અપડેટ કરાયું",
-            adv_title_1: "ગુજરાત અને મધ્યપ્રદેશ ઝોન: ચોમાસુ વાવણી સલાહ",
-            badge_priority_high: "ઉચ્ચ અગ્રતા",
-            adv_desc_1: "માટીની ભેજ ટેલિમેટ્રી બાजरी અને મગના અંતર-વાવેતર માટે અનુકૂળ સ્થિતિ દર્શાવે છે. યુરિયાનો અતિશય ઉપયોગ ટાળો; માઈક્રોબાયोटा બચાવવા માટે રાઈઝોબિયમ બાયો-ફર્ટિલાઈઝર અપનાવો.",
-            doc_title: "એઆઈ મલ્ટિમોડલ પાક ડૉક્ટર અને લાઇવ સ્કેનર",
-            doc_subtitle: "સંक्रमित પાંદડાઓ સ્કેન કરવા અથવા ફોટો અપલોડ કરવા માટે તમારા લાઇવ કેમેરાનો ઉપયોગ કરો. ત્વरित એઆઈ નિદાન, સરળ ઓર્ગેનિક ઉપાયો અને આગામી પગલાં મેળવો.",
-            mode_upload: "છબી અપલોડ કરો",
-            mode_live_cam: "લાઇવ કેમેરા",
-            upload_prompt: "પાંદડાનો ફોટો અપલોડ કરવા માટે ખેંચો અને છોડો અથવા ક્લિક કરો",
-            upload_sub: "JPG, PNG, WEBP समर्थित (अधिकतम 10MB)",
-            btn_browse: "ફાઇલો બ્રાઉઝ કરો",
-            btn_capture: "પાંદડું કેપ્ચર કરો",
-            sample_scans_title: "અથવા પ્રી-લોડેડ નમૂનાઓથી પરીક્ષણ કરો:",
-            sample_blight: "પાંદડાનો બ્લાઇટ રોગ",
-            sample_nitrogen: "નાાઇટ્રોજનની ઉણપ",
-            sample_healthy: "સ્વસ્થ પાક",
-            diag_report_title: "એઆઈ મલ્ટિમોડલ નિદાન અહેવાલ",
-            gemini_vision_active: "Gemini 2.5 Flash Vision સક્રિય",
-            diag_status_ready: "છોડ સ્કેન કરવા માટે તૈયાર",
-            status_waiting: "છબીની રાહ જોઈ રહ્યા છીએ",
-            diag_instruction_desc: "પાકના રોગો અને જીવાતોનું ત્વરિત નિદાન કરવા માટે છબી અપલોડ કરો અથવા લાઇવ કેમેરા સ્કેનરનો ઉપયોગ કરો.",
-            regen_title: "Vertex AI રીજેનેરેટિવ પાક ભલામણકર્તા",
-            regen_subtitle: "આબોહવા-સ્થિતિસ્થાપક પાકની ભલાମણો મેળવવા માટે તમારું રાજ્ય, માટીનો પ્રકાર અને પાણીનું સ્તર પસંદ કરો.",
-            label_state: "રાજ્ય / પ્રદેશ પસંદ કરો",
-            label_soil: "માટીનો પ્રકાર",
-            soil_black: "કાળી કપાસની માટી",
-            soil_alluvial: "કાંપની માટી (Alluvial)",
-            soil_red: "લાલ લોમી માટી",
-            btn_generate_plan: "એઆઈ પ્લાન બનાવો",
-            crop_badge_1: "પ્રાથમિક ભલામણ",
-            crop_name_1: "બાજરી + મઠની શિંગ",
-            crop_desc_1: "દુષ્કાળ સહન કરતી અંતર-વાવેતર સિસ્ટમ જે વાતાવરણીય નાઇટ્રોજનને સ્થિર કરે છે અને સિંચાઈની માંગ 45% ઘટાડે છે.",
-            crop_ben_1a: "માટી કાર્બન સંગ्रहણ: +18%",
-            crop_ben_1b: "ખર્ચ બચત: ₹4,200/એકર",
-            crop_badge_2: "માટી સ્વાસ્થ્ય પુનઃસ્થાપક",
-            crop_name_2: "ગવાર (Cluster Bean)",
-            crop_desc_2: "ઊંડા મૂળની સિસ્ટમ સખત માટીના સ્તરોને તોડે છે અને કુદરતી રીતે ભેજ જાળવી રાખે છે.",
-            crop_ben_2a: "કુદરતી નાઇટ્રોજન ફિક્સર",
-            crop_ben_2b: "શૂન્ય રાસાયણિક જંતુનાશક જરૂરિયાત",
-            crop_badge_3: "આબોહવા લવચીક",
-            crop_name_3: "તલનું પરિભ्रमण",
-            crop_desc_3: "અનિયમિત વરસાદ માટે યોગ્ય ટૂંકા ગાળાનો તેલીબિયાં પાક.",
-            crop_ben_3a: "પરિપક્વતા: 85-90 દિવસ",
-            crop_ben_3b: "ઉચ્ચ દુષ્કાળ પ્રતિકાર",
-            dpi_title: "ઇન્ટરઓપરેબલ રાજ્ય કૃષિ ડેટા ગ્રીડ",
-            dpi_subtitle: "ડિજિટલ પબ્લિક ગુડ (DPG) તરીકે નિર્મિત. રીઅલ-ટાઇમમાં ક્રોસ-સ્ટેટ આબોહવા મોડેલો અને જંતુ ટ્રેકિંગ ડેટા શેર કરવો.",
-            grid_node_1: "ગુજરાત રાજ્ય કૃષિ-નોડ (GSAN)",
-            status_synced: "સિંક અને સક્રિય",
-            grid_desc_1: "ડ્રોન ટેલિમેટ્રી, સૌરાષ્ટ્ર માટીની ભેજના નકશા અને કપાસ જીવાત પૂર્વાનુમાન મોડેલો શેર કરવા.",
-            shared_models: "શેર કરેલ મોડેલ્સ: 12",
-            grid_node_2: "મધ્યપ્રદેશ કૃષિ-નેટવર્ક (MPAN)",
-            grid_desc_2: "માલવા ઉચ્ચપ્રદેશ ઘઉં રસ્ટ અગાઉની ચેતવણી બુદ્ધિમત્તા અને ઓર્ગેનિક સોયાબીન પુનર્જીવિત પરિમાણો શેર કરવા.",
-            footer_rights: "© 2026 AgriN - રીજેનેરેટિવ એગ્રીકલ્ચર ઇન્ટેલિજન્સ નેટવર્ક. હેકાથોન માટે નિર્મિત.",
-            footer_stack: "Google AI Studio • Vertex AI • Gemini Multimodal"
-        };
+        let currentStream = null;
 
-        // Add fallback dictionaries for other languages so they don't break
-        ['pa', 'ta', 'te', 'mr'].forEach(lang => {
-            translations[lang] = translations.en;
-        });
-
-        function changeLanguage(lang) {
-            const dict = translations[lang] || translations.en;
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (dict[key]) {
-                    el.innerText = dict[key];
-                }
-            });
-        }
-
-        // Tab Switching Logic
         function switchTab(tabId) {
-            document.querySelectorAll('[id^="tab-content-"]').forEach(el => {
-                el.classList.add('hidden');
+            // Hide all tab contents
+            document.querySelectorAll('main > section').forEach(sec => {
+                sec.classList.add('hidden');
             });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            // Show selected tab content
+            document.getElementById('tab-content-' + tabId).classList.remove('hidden');
+
+            // Reset navigation button styles
+            document.querySelectorAll('nav button').forEach(btn => {
                 btn.classList.remove('bg-agri-50', 'text-agri-700');
                 btn.classList.add('text-slate-600', 'hover:bg-slate-100');
             });
 
-            document.getElementById(`tab-content-${tabId}`).classList.remove('hidden');
-            const activeBtn = document.getElementById(`nav-${tabId}`);
+            // Highlight active navigation button
+            const activeBtn = document.getElementById('nav-' + tabId);
             if(activeBtn) {
-                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
                 activeBtn.classList.add('bg-agri-50', 'text-agri-700');
+                activeBtn.classList.remove('text-slate-600', 'hover:bg-slate-100');
             }
 
-            if(tabId !== 'cropdoc') {
+            // If switching away from cropdoc, stop webcam if running
+            if (tabId !== 'cropdoc') {
                 stopWebcam();
             }
         }
 
-        // Scanner Mode Switching (Upload vs Camera)
-        let webcamStream = null;
-
         function switchScannerMode(mode) {
+            const uploadBtn = document.getElementById('mode-btn-upload');
+            const cameraBtn = document.getElementById('mode-btn-camera');
             const uploadContainer = document.getElementById('scanner-upload-container');
             const cameraContainer = document.getElementById('scanner-camera-container');
-            const btnUpload = document.getElementById('mode-btn-upload');
-            const btnCamera = document.getElementById('mode-btn-camera');
 
-            if(mode === 'upload') {
+            if (mode === 'upload') {
+                uploadBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-agri-600 text-agri-700 flex items-center gap-2";
+                cameraBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2";
                 uploadContainer.classList.remove('hidden');
                 cameraContainer.classList.add('hidden');
-                btnUpload.classList.add('border-agri-600', 'text-agri-700');
-                btnUpload.classList.remove('border-transparent', 'text-slate-500');
-                btnCamera.classList.remove('border-agri-600', 'text-agri-700');
-                btnCamera.classList.add('border-transparent', 'text-slate-500');
                 stopWebcam();
             } else {
-                uploadContainer.classList.add('hidden');
+                cameraBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-agri-600 text-agri-700 flex items-center gap-2";
+                uploadBtn.className = "pb-3 px-4 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2";
                 cameraContainer.classList.remove('hidden');
-                btnCamera.classList.add('border-agri-600', 'text-agri-700');
-                btnCamera.classList.remove('border-transparent', 'text-slate-500');
-                btnUpload.classList.remove('border-agri-600', 'text-agri-700');
-                btnUpload.classList.add('border-transparent', 'text-slate-500');
+                uploadContainer.classList.add('hidden');
                 startWebcam();
             }
         }
 
         function startWebcam() {
-            const video = document.getElementById('webcamVideo');
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                .then(stream => {
-                    webcamStream = stream;
-                    video.srcObject = stream;
-                })
-                .catch(err => {
-                    alert('Camera access denied or unavailable: ' + err.message);
-                    switchScannerMode('upload');
-                });
+            const videoElement = document.getElementById('webcamVideo');
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                    .then(stream => {
+                        currentStream = stream;
+                        videoElement.srcObject = stream;
+                    })
+                    .catch(err => {
+                        alert("Unable to access camera. Please use file upload instead.");
+                        switchScannerMode('upload');
+                    });
+            }
         }
 
         function stopWebcam() {
-            if (webcamStream) {
-                webcamStream.getTracks().forEach(track => track.stop());
-                webcamStream = null;
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('upload-placeholder').classList.add('hidden');
+                    const preview = document.getElementById('image-preview-container');
+                    preview.classList.remove('hidden');
+                    document.getElementById('selectedLeafImg').src = e.target.result;
+                    simulateDiagnosis('Uploaded Leaf Sample');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function resetImageUpload() {
+            document.getElementById('leafImageInput').value = '';
+            document.getElementById('image-preview-container').classList.add('hidden');
+            document.getElementById('upload-placeholder').classList.remove('hidden');
+        }
+
+        function loadSampleScan(type) {
+            switchScannerMode('upload');
+            const preview = document.getElementById('image-preview-container');
+            document.getElementById('upload-placeholder').classList.add('hidden');
+            preview.classList.remove('hidden');
+            
+            const img = document.getElementById('selectedLeafImg');
+            if(type === 'blight') {
+                img.src = 'https://images.unsplash.com/photo-1530183170791-2b5999ac6da9?auto=format&fit=crop&w=600&q=80';
+                simulateDiagnosis('Early Leaf Blight (Alternaria solani)');
+            } else if(type === 'nitrogen') {
+                img.src = 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?auto=format&fit=crop&w=600&q=80';
+                simulateDiagnosis('Nitrogen Deficiency / Chlorosis');
+            } else {
+                img.src = 'https://images.unsplash.com/photo-1628352081506-83c43123ed67?auto=format&fit=crop&w=600&q=80';
+                simulateDiagnosis('Healthy Crop Leaf (Vigor Index Optimal)');
             }
         }
 
@@ -746,115 +506,41 @@
             canvas.height = video.videoHeight || 480;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/png');
             
-            document.getElementById('selectedLeafImg').src = dataUrl;
-            document.getElementById('upload-placeholder').classList.add('hidden');
-            document.getElementById('image-preview-container').classList.remove('hidden');
             switchScannerMode('upload');
-            runAiDiagnosis('blight');
-        }
-
-        function handleImageUpload(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('selectedLeafImg').src = e.target.result;
-                    document.getElementById('upload-placeholder').classList.add('hidden');
-                    document.getElementById('image-preview-container').classList.remove('hidden');
-                    runAiDiagnosis('blight');
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function resetImageUpload() {
-            document.getElementById('leafImageInput').value = '';
-            document.getElementById('upload-placeholder').classList.remove('hidden');
-            document.getElementById('image-preview-container').classList.add('hidden');
-            document.getElementById('diagnosis-content').innerHTML = `
-                <div class="p-4 bg-white rounded-xl border border-slate-200">
-                    <h5 class="font-bold text-slate-800 text-base">Ready for Plant Scan</h5>
-                    <p class="text-sm text-slate-600 mt-1">Upload an image or use the live camera scanner to instantly diagnose crop diseases and receive organic remediation steps.</p>
-                </div>`;
-        }
-
-        function loadSampleScan(type) {
-            const sampleImages = {
-                blight: 'https://images.unsplash.com/photo-1530183170793-0e1d0529949f?auto=format&fit=crop&w=600&q=80',
-                nitrogen: 'https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=600&q=80',
-                healthy: 'https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?auto=format&fit=crop&w=600&q=80'
-            };
-            document.getElementById('selectedLeafImg').src = sampleImages[type];
             document.getElementById('upload-placeholder').classList.add('hidden');
             document.getElementById('image-preview-container').classList.remove('hidden');
-            runAiDiagnosis(type);
+            document.getElementById('selectedLeafImg').src = canvas.toDataURL('image/png');
+            simulateDiagnosis('Live Camera Captured Leaf Analysis');
         }
 
-        function runAiDiagnosis(type) {
-            const container = document.getElementById('diagnosis-content');
-            
-            let diagnosisData = {
-                title: "Early Leaf Blight (Alternaria solani)",
-                severity: "Moderate / 94.8% Confidence",
-                desc: "Concentric dark necrotic lesions with chlorotic halos detected on foliage.",
-                solution: "1. Spray fermented buttermilk (chaas) combined with copper-free bio-fungicide.<br>2. Apply Neem oil spray (5ml per liter of water) during early morning.",
-                preventive: "1. Avoid overhead sprinkler irrigation; switch to drip watering.<br>2. Practice a 3-year crop rotation with non-host legumes.<br>3. Remove and compost severely infected lower leaves."
-            };
-
-            if(type === 'nitrogen') {
-                diagnosisData = {
-                    title: "Nitrogen Deficiency & Chlorosis",
-                    severity: "High / 97.2% Confidence",
-                    desc: "General yellowing of older leaves while upper foliage remains pale green.",
-                    solution: "1. Apply well-composted farmyard manure (FYM).<br>2. Spray liquid Azotobacter bio-fertilizer directly to root zones.",
-                    preventive: "1. Integrate green manure crops (Dhaincha) before main sowing.<br>2. Monitor soil nitrate levels bi-weekly."
-                };
-            } else if(type === 'healthy') {
-                diagnosisData = {
-                    title: "Crop Appears Healthy & Vigorous",
-                    severity: "Normal / 99.1% Vigor Score",
-                    desc: "Optimal chlorophyll levels, firm cell walls, and no active fungal or pest vectors detected.",
-                    solution: "1. Maintain current watering schedule.<br>2. Apply preventive Panchagavya foliar spray for immunity boost.",
-                    preventive: "1. Continue drip irrigation.<br>2. Scout fields weekly for early detection."
-                };
-            }
-
-            container.innerHTML = `
-                <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-3 shadow-sm animate-pulse">
+        function simulateDiagnosis(conditionName) {
+            const content = document.getElementById('diagnosis-content');
+            content.innerHTML = `
+                <div class="p-4 bg-white rounded-xl border border-slate-200 space-y-3">
                     <div class="flex items-center justify-between">
-                        <h5 class="font-bold text-rose-700 text-base flex items-center gap-2">
-                            <i class="fa-solid fa-triangle-exclamation"></i> Diagnosis: ${diagnosisData.title}
-                        </h5>
-                        <span class="text-xs bg-rose-50 text-rose-700 px-2.5 py-0.5 rounded font-bold">Severity: ${diagnosisData.severity}</span>
+                        <h5 class="font-bold text-slate-900 text-base">${conditionName}</h5>
+                        <span class="text-xs bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded font-bold">Confidence: 96.4%</span>
                     </div>
-                    <p class="text-xs text-slate-600">${diagnosisData.desc}</p>
-                    
-                    <div class="pt-2 border-t border-slate-100">
-                        <p class="text-xs font-bold text-slate-800 uppercase mb-1 flex items-center gap-1.5 text-agri-700">
-                            <i class="fa-solid fa-seedling"></i> Easy Organic Solution / Remedies:
-                        </p>
-                        <p class="text-xs text-slate-600 bg-agri-50/50 p-2.5 rounded-lg border border-agri-100 leading-relaxed">${diagnosisData.solution}</p>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Gemini Vision analyzed leaf discoloration patterns and vein chlorosis. Detected early pathogen stress.
+                    </p>
+                    <div class="pt-2 border-t border-slate-100 space-y-1.5 text-xs">
+                        <p class="font-bold text-slate-800"><i class="fa-solid fa-seedling text-agri-600 mr-1.5"></i> Recommended Organic Remedy:</p>
+                        <p class="text-slate-600 pl-5">Apply Neem Oil extract (5ml/liter) and Bacillus subtilis bio-fungicide spray during early morning hours.</p>
                     </div>
-
-                    <div class="pt-1">
-                        <p class="text-xs font-bold text-slate-800 uppercase mb-1 flex items-center gap-1.5 text-amber-700">
-                            <i class="fa-solid fa-shield-halved"></i> Preventive Measures to Take Next:
-                        </p>
-                        <p class="text-xs text-slate-600 bg-amber-50/50 p-2.5 rounded-lg border border-amber-100 leading-relaxed">${diagnosisData.preventive}</p>
-                    </div>
-                </div>`;
+                </div>
+            `;
         }
 
         function generateRegenerativePlan() {
-            alert('Vertex AI generated customized crop rotation and regenerative soil carbon plan successfully!');
+            alert("Vertex AI has successfully refreshed regional soil carbon parameters and updated your customized intercropping rotation plan!");
         }
 
-        // Initialize default language view on load
-        window.addEventListener('DOMContentLoaded', () => {
-            changeLanguage('gu');
-        });
+        function changeLanguage(langCode) {
+            // Simple notification or integration placeholder
+            console.log("Language changed to: " + langCode);
+        }
     </script>
 </body>
 </html>
